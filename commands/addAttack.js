@@ -19,7 +19,7 @@ module.exports = async (bot, message, args, argsF) => {
   }
 
   let score = (1 + args.th - player.th + args.stars) * 2 + args.difficult;
-  if (score < 0) score == 0;
+  if (score < 0) score = 0;
   score = score * 100 + args.percent;
 
   if (player != null) {

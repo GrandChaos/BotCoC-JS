@@ -1,8 +1,17 @@
 module.exports = async (bot) => {
   console.log('\n', Date(), '\n')
-  console.log(bot.user.username, '#', bot.user.discriminator, '\n')
+  console.log(bot.user.username + '#' + bot.user.discriminator, '\n')
 
-  const commandsIT = bot.guilds.cache.get("961280288057593877").commands; //Или bot.application.commands - если команды будут глобальными
+  bot.user.setPresence({
+    activities: [
+      {
+        type: 3,
+        name: "за тобой"
+      }
+    ]
+  });
+
+  const commandsIT = bot.guilds.cache.get("935908971955494942").commands; //Или bot.application.commands - если команды будут глобальными 
   await commandsIT.fetch(); //Найти все команды
 
   for (const command of bot.commands.any) {

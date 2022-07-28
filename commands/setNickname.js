@@ -16,8 +16,13 @@ module.exports = async (bot, message, args, argsF) => {
     return;
   }
 
+  if (!/^[a-zA-Zа-яА-Я0-9_]+$/.test(argsF.new_nickname)) {
+    message.reply(`Никнейм содержит недопустимые символы!`);
+    return;
+  }
+
   oldNickname = player.nickname;
-  player.set({nickname: argsF.new_nickname});
+  player.set({ nickname: argsF.new_nickname });
   player.save();
 
   message.reply(`Никнейм ${oldNickname} изменён на ${player.nickname}.`)

@@ -5,7 +5,7 @@ module.exports = async (bot, message, args, argsF) => {
   }
 
   args.tag = args.tag.toUpperCase();
-  if (args.tag[0] != '#' || args.tag.length != 10) {
+  if (args.tag[0] != '#' || !/^[a-zA-Z0-9#]+$/.test(args.tag)) {
     message.reply("Неверный формат тега!");
     return;
   }
@@ -13,6 +13,11 @@ module.exports = async (bot, message, args, argsF) => {
   const player = await bot.Players.findById(args.tag);
   if (player != null) {
     message.reply(`Игрок с тегом ${tag} уже зарегистрирован!`);
+    return;
+  }
+
+  if ( !/^[a-zA-Zа-яА-Я0-9_]+$/.test(argsF.nickname) ) {
+    message.reply(`Никнейм содержит недопустимые символы!`);
     return;
   }
 
