@@ -53,8 +53,9 @@ async function updateMembers(bot, clash) {
 
 
 async function updateWar(bot, clash) {
+  let curWar;
   try {
-    const curWar = await clash.getCurrentWar(bot.clanTag) //текущая война
+    curWar = await clash.getCurrentWar(bot.clanTag) //текущая война
     let lastWar = await bot.Wars.find().limit(1).sort({$natural:-1}) //последний противник
     lastWar = lastWar[0];
     //console.log(lastWar);
