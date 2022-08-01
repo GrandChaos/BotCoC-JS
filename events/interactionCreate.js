@@ -1,4 +1,4 @@
-module.exports = async (bot, interaction) => {
+module.exports = async (bot, clash, interaction) => {
   if(!interaction.isCommand()) return; //Проверка на слэш команду
   const argsF = {}; //Создание аргументов
   argsF.slash = true;
@@ -10,6 +10,6 @@ module.exports = async (bot, interaction) => {
   interaction.author = interaction.user;
   interaction.channel = bot.channels.cache.get(interaction.channelId);
   interaction.guild = interaction.member.guild;
-  if(CMD) CMD(bot, interaction, args, argsF) //Если есть команда - вызвать её.*****
+  if(CMD) CMD(bot, clash, interaction, args, argsF) //Если есть команда - вызвать её.*****
   .catch(err => console.error(err));
 };

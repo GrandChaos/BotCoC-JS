@@ -1,4 +1,4 @@
-module.exports = (bot, message) => {
+module.exports = (bot, clash, message) => {
   const {content} = message;
   const config = require('../config.json');
   config.prefix = '/';
@@ -13,6 +13,6 @@ module.exports = (bot, message) => {
     argsF = messageArrayFull.slice(1),
     commandRun = bot.commands.get(command);
 
-  if (commandRun) commandRun(bot, message, args, argsF)
+  if (commandRun) commandRun(bot, clash, message, args, argsF, clash)
   .catch(err => console.error(err));
 }

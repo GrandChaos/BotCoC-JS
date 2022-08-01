@@ -10,7 +10,9 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env['TOKEN'])
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: 'CW Rating Bot, v1.0'};
+bot.version = {text: 'CW Rating Bot, v2.0'};
+bot.defaultChannel = '1001695597327286282';
+bot.clanTag = '#28QCVRVVL';
 
 
 //Подключение к БД
@@ -21,15 +23,29 @@ const mongo_uri = `mongodb+srv://${process.env['MONGO_USERNAME']}:${process.env[
 mongoose.connect(mongo_uri)
   .then(()=>{console.log('Database connected!\n')})
   .catch((err)=>{console.log(`DB error: ${err}`)});
+
 const Player = mongoose.Schema({
   _id: String,
   nickname: String,
-  th: Number,
+  hide: {type: Boolean, default: false},
   attacks: [{date: {type: Date, default: Date.now}, score: Number}],
   date: {type: Date, default: Date.now}
 })
 const model = mongoose.model('Player', Player, 'Players');
 bot.Players = model;
+
+const War = mongoose.Schema({
+  opponent: String,
+  done: {type: Boolean, default: false}
+})
+const model_1 = mongoose.model('War', War, 'Wars');
+bot.Wars = model_1;
+
+
+//Api клеша
+const { Client } = require('clashofclans.js');
+const clash = new Client();
+clash.login({email: process.env['CLASH_EMAIL'], password: process.env['CLASH_PASSWORD']});
 
 
 //HTTP cервер
@@ -37,7 +53,11 @@ require('./keep_alive.js')
 
 
 //Cобытия
-require('./events')(bot);
+require('./events')(bot, clash);
+
+
+//автообновление
+require('./update.js')(bot, clash);
 
 
 //Подгрузка комманд
