@@ -54,9 +54,10 @@ async function updateMembers(bot, clash) {
 
 async function updateWar(bot, clash) {
   let curWar;
+  let lastWar;
   try {
     curWar = await clash.getCurrentWar(bot.clanTag) //текущая война
-    let lastWar = await bot.Wars.find().limit(1).sort({$natural:-1}) //последний противник
+    lastWar = await bot.Wars.find().limit(1).sort({$natural:-1}) //последний противник
     lastWar = lastWar[0];
     //console.log(lastWar);
   }
@@ -65,7 +66,7 @@ async function updateWar(bot, clash) {
     return;
   }
 
-  if (curWar == null) return; //если войны нет - выходим
+  if (curWar == null ) return; //если войны нет - выходим
   
   if (curWar.state == 'warEnded' && lastWar.done) return; //если война окончена и уже обработано - выходим
 
