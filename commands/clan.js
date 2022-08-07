@@ -26,7 +26,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     }
   }
   else clan = await clash.getClan(bot.clanTag);
-
+  
   let des = `Тег: ${clan.tag}\n\
   Очков: ${clan.points}\n\
   Уровень: ${clan.level}\n\
@@ -41,13 +41,13 @@ module.exports = async (bot, clash, message, args, argsF) => {
   Лига войн кланов: ${clan.warLeague.name}\n\
   Побед: ${clan.warWins}\n\
   Поражений: ${clan.warLosses}\n\
-  Ничьих: ${clan.Ties}\n\
+  Ничьих: ${clan.warTies}\n\
   Серия побед: ${clan.warWinStreak}\n\
   \n\
   ${clan.description}`;
 
   //console.log(clan);
-
+  
   const embed = new MessageEmbed()
     .setColor('DARK_RED')
     .setTitle(clan.name)
@@ -56,9 +56,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
     .setDescription(des)
     .setFooter(bot.version)
     .setTimestamp()
+  
   message.reply({ embeds: [embed] });
-
-  //message.reply(clan.name);
 
 };
 

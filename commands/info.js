@@ -28,6 +28,10 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     const member = await clash.getPlayer(player._id);
 
+    let date;
+    if (!player.hide) date = `Состоит в клане с ${formatDate(player.date)}`;
+    else date = `Покинул клан ${formatDate(player.date)}`;
+
     let description = "```Очки | Дата\n"
 
     let rating = 0;
@@ -61,13 +65,13 @@ module.exports = async (bot, clash, message, args, argsF) => {
       .setTitle(`Профиль игрока ${player.nickname}`)
       .setThumbnail('https://cdn-icons-png.flaticon.com/512/6695/6695008.png')
       //.setAuthor({name: 'Рейтинг эффективности на КВ и ЛВК', iconURL: 'https://cdn-icons-png.flaticon.com/512/6695/6695008.png'})
-      .setDescription(`Тег: ${player.id}\nУровень ТХ: ${member.townHallLevel}\nВсего атак: ${countAttacks}\n`)
+      .setDescription(`Тег: ${player.id}\n` + date +`\nУровень ТХ: ${member.townHallLevel}\nВсего атак: ${countAttacks}\n`)
       .setFooter(bot.version)
       .setTimestamp()
 
     if (countAttacks > 0) {
       embed
-        .setDescription(`Тег: ${player.id}\nУровень ТХ: ${member.townHallLevel}\nВсего атак: ${countAttacks}\nСредний показатель: ${rating}\n\nДанные по атакам:\n` + description)
+        .setDescription(`Тег: ${player.id}\n` + date +`\nУровень ТХ: ${member.townHallLevel}\nВсего атак: ${countAttacks}\nСредний показатель: ${rating}\n\nДанные по атакам:\n` + description)
         //.addFields(fields)
     }
 
