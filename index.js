@@ -10,8 +10,9 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env['TOKEN'])
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: 'CW Rating Bot, v2.0'};
-bot.defaultChannel = '1001695597327286282';
+bot.version = {text: 'CW Rating Bot, v2.1'};
+bot.warChannel = '1007633975910613022';
+bot.logChannel = '1005059293592174743';
 bot.clanTag = '#28QCVRVVL';
 
 
@@ -29,6 +30,7 @@ const Player = mongoose.Schema({
   nickname: String,
   hide: {type: Boolean, default: false},
   attacks: [{date: {type: Date, default: Date.now}, score: Number}],
+  warns: [{date: {type: Date, default: Date.now}, reason: String, value: Number}],
   date: {type: Date, default: Date.now}
 })
 const model = mongoose.model('Player', Player, 'Players');
@@ -36,7 +38,15 @@ bot.Players = model;
 
 const War = mongoose.Schema({
   opponent: String,
-  done: {type: Boolean, default: false}
+  done: {type: Boolean, default: false},
+  date: Date,
+  stars: Number,
+  destruction: Number,
+  attackCount: Number,
+  opponentStars: Number,
+  opponentDestruction: Number,
+  opponentAttackCount: Number,
+  isCWL: Boolean,
 })
 const model_1 = mongoose.model('War', War, 'Wars');
 bot.Wars = model_1;

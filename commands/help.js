@@ -19,9 +19,11 @@ module.exports = async (bot, clash, message, args, argsF) => {
 \n\
 /clan_members #ТЕГ(необязательно) - список игроков клана. Если тег не указан - клан #STABILITY\n\
 \n\
+/warlog #ТЕГ(необязательно) - лог клановых войн клана. Если тег не указан - клан #STABILITY\n\
+\n\
 /top - текущий топ игроков по рейтингу (только игроки клана #STABILITY)\n\
 \n\
-/info НИКНЕЙМ(или #ТЕГ) - информация о игроке и его атаках (только игроки клана #STABILITY)\n')
+/profile НИКНЕЙМ(или #ТЕГ) - информация о игроке и его атаках (только игроки клана #STABILITY)\n')
     .setFooter(bot.version)
     .setTimestamp()
   

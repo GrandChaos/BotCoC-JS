@@ -14,7 +14,7 @@ async function updateMembers(bot, clash) {
     const player = await bot.Players.findById(member.tag);
 
     if (player == null) { //новичок
-      bot.channels.cache.get(bot.defaultChannel).send(`Приветствуем новичка ${member.name} в нашем клане! Добро пожаловать!`);
+      bot.channels.cache.get(bot.logChannel).send(`Приветствуем новичка ${member.name} в нашем клане! Добро пожаловать!`);
       const newPlayer = new bot.Players({
         _id: member.tag,
         nickname: member.name,
@@ -23,14 +23,14 @@ async function updateMembers(bot, clash) {
     }
 
     else if (player.hide) { //уже был в клане
-      bot.channels.cache.get(bot.defaultChannel).send(`Старый знакомый ${member.name} вновь в нашем клане! Покинул клан ${formatDate(player.date)}. Интересно, что привело его вновь?`);
+      bot.channels.cache.get(bot.logChannel).send(`Старый знакомый ${member.name} вновь в нашем клане! Покинул клан ${formatDate(player.date)}. Интересно, что привело его вновь?`);
       await player.set({ hide: false });
       await player.set({ date: new Date()});
       await player.save();
     }
 
-    else if (member.name != player.nickname) { //смена никнейма
-      bot.channels.cache.get(bot.defaultChannel).send(`${player.nickname} сменил никнейм на ${member.name}`);
+    else if (member.name != player.nickname && !player.hide) { //смена никнейма
+      bot.channels.cache.get(bot.logChannel).send(`${player.nickname} сменил никнейм на ${member.name}`);
       await player.set({ nickname: member.name });
       await player.save();
     }
@@ -42,7 +42,7 @@ async function updateMembers(bot, clash) {
   for (player of players) { //ищем ливнувших
     const member = clanMembers.find(m => m.tag === player._id);
     if (member == null && !player.hide) {
-      bot.channels.cache.get(bot.defaultChannel).send(`Игрок ${player.nickname} покинул клан. Был участником клана с ${formatDate(player.date)}.`);
+      bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул клан. Был участником клана с ${formatDate(player.date)}.`);
       await player.set({ hide: true });
       await player.set({ date: new Date()});
       await player.save();
@@ -66,7 +66,7 @@ async function updateWar(bot, clash) {
     return;
   }
 
-  if (curWar == null || lastWar == null) return; //если войны нет - выходим
+  if (curWar == null || lastWar == null) return;
 
   if (curWar.state == 'warEnded' && lastWar.done) return; //если война окончена и уже обработано - выходим
 
@@ -83,20 +83,17 @@ async function updateWar(bot, clash) {
 
   if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана
     await summarize(bot, curWar);
-
-    await lastWar.set({ done: true }) //сохраняем, что обработан
-    await lastWar.save();
+    await saveToDB (curWar, lastWar);
 
     return;
   }
 
   if (curWar.state == 'inWar' && curWar.isCWL && curWar.opponent.tag != lastWar.opponent) { //если начался следующий раунд ЛВК
-    const prevRound = await clash.getCurrentWar({ clanTag: bot.clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
-    await summarize(bot, prevRound); //обрабатыевем
-
-    await lastWar.set({ done: true }) //сохраняем, что обработан
-    await lastWar.save();
-
+    if (!lastWar.done) {
+      const prevRound = await clash.getCurrentWar({ clanTag: bot.clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
+      await summarize(bot, prevRound); //обрабатыевем
+      await saveToDB(prevRound, lastWar);
+    }
     const newWar = new bot.Wars({ //записываем новый раунд
       opponent: curWar.opponent.tag
     })
@@ -108,38 +105,50 @@ async function updateWar(bot, clash) {
 
 
 
-
-
 async function summarize(bot, war) { // подведение итогов
   if (war.state != 'warEnded') return; //не закончена - вышли
 
   let des;
-  if (war.clan.stars > war.opponent.stars) des = '**Победа**';
-  else if (war.clan.stars < war.opponent.stars) des = '**Поражение**';
-  else if (war.clan.destruction > war.opponent.destruction) des = '**Победа**';
-  else if (war.clan.destruction < war.opponent.destruction) des = '**Поражение**';
+  let color = 'GRAY';
+  if (war.clan.stars > war.opponent.stars) {
+    des = '**Победа**';
+    color = 'GREEN'
+  }
+  else if (war.clan.stars < war.opponent.stars) {
+    des = '**Поражение**';
+    color = 'RED'
+  }
+  else if (war.clan.destruction.toFixed(2) > war.opponent.destruction.toFixed(2)) {
+    des = '**Победа**';
+    color = 'GREEN'
+  }
+  else if (war.clan.destruction.toFixed(2) < war.opponent.destruction.toFixed(2)) {
+    des = '**Поражение**';
+    color = 'RED'
+  }
   else des = '**Ничья**';
 
+  des += `\nЗавершена: ${formatDate(war.endTime)}`;
 
   const embedWar = new MessageEmbed() //итоги по войне
-    .setColor('DARK_RED')
+    .setColor(color)
     .setTitle('Итоги войны')
     .setDescription(des)
     .setThumbnail('https://cdn-icons-png.flaticon.com/512/6695/6695008.png')
     .addFields(
       { name: war.clan.name, value: `Звёзды: ${war.clan.stars}\nРазрушение: ${war.clan.destruction.toFixed(2)}%\nАтак использовано: ${war.clan.attackCount}`, inline: true },
-      { name: war.opponent.name, value: `Звёзды: ${war.opponent.stars}\nРазрушение: ${war.opponent.destruction.toFixed(2)}%\nАтак использовано: ${war.clan.attackCount}`, inline: true },
+      { name: war.opponent.name, value: `Звёзды: ${war.opponent.stars}\nРазрушение: ${war.opponent.destruction.toFixed(2)}%\nАтак использовано: ${war.opponent.attackCount}`, inline: true },
     )
 
 
   let embedMembers_1 = new MessageEmbed() //итоги по атакам 1-25
-    .setColor('DARK_RED')
+    .setColor(color)
     .setTitle('Результаты участников войны')
     .setDescription('=======================================================')
 
 
   let embedMembers_2 = new MessageEmbed() //итоги по атакам 25-50
-    .setColor('DARK_RED')
+    .setColor(color)
     .setDescription('=======================================================')
 
 
@@ -189,7 +198,7 @@ async function summarize(bot, war) { // подведение итогов
 
         const score = Math.trunc(rate * difficult);
 
-        await player.attacks.push({ score: score });
+        await player.attacks.push({ score: score, date: war.endTime });
         await player.save();
 
         fieldValue += score + '\n';
@@ -200,7 +209,7 @@ async function summarize(bot, war) { // подведение итогов
     if (attacks != null) countAttacks = attacks.length;
 
     for (var i = countAttacks; i < war.attacksPerMember; i++) { //пропущенные атаки
-      await player.attacks.push({ score: 0 });
+      await player.attacks.push({ score: 0, date: war.endTime });
       await player.save();
 
       fieldValue += 0 + '\n';
@@ -213,12 +222,28 @@ async function summarize(bot, war) { // подведение итогов
   }
   if (countMembers <= 25) {
     embedMembers_1.setTimestamp().setFooter(bot.version);
-    bot.channels.cache.get(bot.defaultChannel).send({ embeds: [embedWar, embedMembers_1] });
+    bot.channels.cache.get(bot.warChannel).send({ embeds: [embedWar, embedMembers_1] });
+    return;
   }
   else {
     embedMembers_2.setTimestamp().setFooter(bot.version);
-    bot.channels.cache.get(bot.defaultChannel).send({ embeds: [embedWar, embedMembers_1, embedMembers_2] });
+    bot.channels.cache.get(bot.warChannel).send({ embeds: [embedWar, embedMembers_1, embedMembers_2] });
+    return;
   }
+}
+
+async function saveToDB (war, warDB) {
+  await warDB.set({ done: true });
+  await warDB.set({ date: war.endTime });
+  await warDB.set({ stars: war.clan.stars });
+  await warDB.set({ destruction: war.clan.destruction.toFixed(2) });
+  await warDB.set({ attackCount: war.clan.attackCount });
+  await warDB.set({ opponentStars: war.opponent.stars });
+  await warDB.set({ opponentDestruction: war.opponent.destruction.toFixed(2) });
+  await warDB.set({ opponentAttackCount: war.opponent.attackCount });
+  await warDB.set({ isCWL:  war.isCWL});
+  
+  await warDB.save();
 }
 
 function formatDate(date) {

@@ -53,7 +53,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     warlog = await clash.getClanWarLog(clan.tag);
   }
   catch {
-    message.channel.send("Лог клана не доступен");
+    message.channel.send("Лог клана недоступен");
     return;
   }
   
@@ -70,7 +70,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     else if (warlog.at(i).result == "lose") warEmbed.setColor('RED');
     else warEmbed.setColor('GRAY');
     
-    let warDes = `Окончена: ${formatDate(warlog.at(i).endTime)}\n\
+    let warDes = `Завершена: ${formatDate(warlog.at(i).endTime)}\n\
 Размер команды: ${warlog.at(i).teamSize}\n\
 Тип: `;
 
@@ -108,6 +108,7 @@ module.exports.interaction = {
       name: "count",
       description: "Длинна лога, по умолчанию 10",
       type: "INTEGER",
+      min_value: 1,
       max_value: 30,
       required: false
     },

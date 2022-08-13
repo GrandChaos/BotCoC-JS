@@ -84,9 +84,9 @@ module.exports = async (bot, clash, message, args, argsF) => {
   }
 };
 
-module.exports.names = ["info"]
+module.exports.names = ["profile"]
 module.exports.interaction = {
-  name: 'info',
+  name: 'profile',
   description: 'Получить информацию о показателях игрока',
   options: [
     {
