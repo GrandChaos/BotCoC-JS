@@ -63,15 +63,15 @@ module.exports = async (bot, clash, message, args, argsF) => {
     const embed = new MessageEmbed()
       .setColor(color)
       .setTitle(`Профиль игрока ${player.nickname}`)
-      .setThumbnail('https://cdn-icons-png.flaticon.com/512/6695/6695008.png')
+      .setThumbnail(member.league.icon.url)
       //.setAuthor({name: 'Рейтинг эффективности на КВ и ЛВК', iconURL: 'https://cdn-icons-png.flaticon.com/512/6695/6695008.png'})
-      .setDescription(`Тег: ${player.id}\n` + date +`\nУровень ТХ: ${member.townHallLevel}\nВсего атак: ${countAttacks}\n`)
+      .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${countAttacks}\n`)
       .setFooter(bot.version)
       .setTimestamp()
 
     if (countAttacks > 0) {
       embed
-        .setDescription(`Тег: ${player.id}\n` + date +`\nУровень ТХ: ${member.townHallLevel}\nВсего атак: ${countAttacks}\nСредний показатель: ${rating}\n\nДанные по атакам:\n` + description)
+        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${countAttacks}\nСредний показатель: ${rating}\n\nДанные по атакам:\n` + description)
         //.addFields(fields)
     }
 

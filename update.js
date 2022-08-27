@@ -10,11 +10,21 @@ async function updateMembers(bot, clash) {
   const clanMembers = await clash.getClanMembers(bot.clanTag); //текущие участники
 
   //ищем новичков
-  for (const member of clanMembers) {
-    const player = await bot.Players.findById(member.tag);
+  for (const clanMember of clanMembers) {
+    const player = await bot.Players.findById(clanMember.tag);
+    const member = await clash.getPlayer(clanMember.tag);
 
     if (player == null) { //новичок
-      bot.channels.cache.get(bot.logChannel).send(`Приветствуем новичка ${member.name} в нашем клане! Добро пожаловать!`);
+      const embed = new MessageEmbed()
+      .setColor('DARK_RED')
+      .setTitle(`Новичок - ${member.name}`)
+      .setThumbnail(member.league.icon.url)
+      .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}`)
+      .setFooter(bot.version)
+      .setTimestamp()
+      
+      bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
+      
       const newPlayer = new bot.Players({
         _id: member.tag,
         nickname: member.name,
@@ -23,7 +33,16 @@ async function updateMembers(bot, clash) {
     }
 
     else if (player.hide) { //уже был в клане
-      bot.channels.cache.get(bot.logChannel).send(`Старый знакомый ${member.name} вновь в нашем клане! Покинул клан ${formatDate(player.date)}. Интересно, что привело его вновь?`);
+      const embed = new MessageEmbed()
+      .setColor('DARK_RED')
+      .setTitle(`Старый знакомый - ${member.name}`)
+      .setThumbnail(member.league.icon.url)
+      .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\n\nПокинул клан: ${formatDate(player.date)}`)
+      .setFooter(bot.version)
+      .setTimestamp()
+      
+      bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
+      
       await player.set({ hide: false });
       await player.set({ date: new Date()});
       await player.save();
@@ -42,7 +61,7 @@ async function updateMembers(bot, clash) {
   for (player of players) { //ищем ливнувших
     const member = clanMembers.find(m => m.tag === player._id);
     if (member == null && !player.hide) {
-      bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул клан. Был участником клана с ${formatDate(player.date)}.`);
+      bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул клан. Был участником с ${formatDate(player.date)}.`);
       await player.set({ hide: true });
       await player.set({ date: new Date()});
       await player.save();
@@ -60,6 +79,7 @@ async function updateWar(bot, clash) {
     lastWar = await bot.Wars.find().limit(1).sort({ $natural: -1 }) //последний противник
     lastWar = lastWar[0];
     //console.log(lastWar);
+    //console.log(curWar);
   }
   catch (err) {
     console.log(err);
@@ -81,10 +101,10 @@ async function updateWar(bot, clash) {
     return;
   }
 
-  if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана
+  if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
     await summarize(bot, curWar);
     await saveToDB (curWar, lastWar);
-
+    
     return;
   }
 
