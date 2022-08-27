@@ -16,15 +16,15 @@ async function updateMembers(bot, clash) {
 
     if (player == null) { //новичок
       const embed = new MessageEmbed()
-      .setColor('DARK_RED')
-      .setTitle(`Новичок - ${member.name}`)
-      .setThumbnail(member.league.icon.url)
-      .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}`)
-      .setFooter(bot.version)
-      .setTimestamp()
-      
+        .setColor('DARK_RED')
+        .setTitle(`Новичок - ${member.name}`)
+        .setThumbnail(member.league.icon.url)
+        .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}`)
+        .setFooter(bot.version)
+        .setTimestamp()
+
       bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
-      
+
       const newPlayer = new bot.Players({
         _id: member.tag,
         nickname: member.name,
@@ -34,17 +34,17 @@ async function updateMembers(bot, clash) {
 
     else if (player.hide) { //уже был в клане
       const embed = new MessageEmbed()
-      .setColor('DARK_RED')
-      .setTitle(`Старый знакомый - ${member.name}`)
-      .setThumbnail(member.league.icon.url)
-      .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\n\nПокинул клан: ${formatDate(player.date)}`)
-      .setFooter(bot.version)
-      .setTimestamp()
-      
+        .setColor('DARK_RED')
+        .setTitle(`Старый знакомый - ${member.name}`)
+        .setThumbnail(member.league.icon.url)
+        .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\n\nПокинул клан: ${formatDate(player.date)}`)
+        .setFooter(bot.version)
+        .setTimestamp()
+
       bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
-      
+
       await player.set({ hide: false });
-      await player.set({ date: new Date()});
+      await player.set({ date: new Date() });
       await player.save();
     }
 
@@ -63,7 +63,7 @@ async function updateMembers(bot, clash) {
     if (member == null && !player.hide) {
       bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул клан. Был участником с ${formatDate(player.date)}.`);
       await player.set({ hide: true });
-      await player.set({ date: new Date()});
+      await player.set({ date: new Date() });
       await player.save();
     }
   }
@@ -102,17 +102,17 @@ async function updateWar(bot, clash) {
   }
 
   if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
-    await summarize(bot, curWar);
-    await saveToDB (curWar, lastWar);
-    
+    await summarizeWar(bot, curWar);
+    await saveWarToDB(curWar, lastWar);
+
     return;
   }
 
   if (curWar.state == 'inWar' && curWar.isCWL && curWar.opponent.tag != lastWar.opponent) { //если начался следующий раунд ЛВК
     if (!lastWar.done) {
       const prevRound = await clash.getCurrentWar({ clanTag: bot.clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
-      await summarize(bot, prevRound); //обрабатыевем
-      await saveToDB(prevRound, lastWar);
+      await summarizeWar(bot, prevRound); //обрабатыевем
+      await saveWarToDB(prevRound, lastWar);
     }
     const newWar = new bot.Wars({ //записываем новый раунд
       opponent: curWar.opponent.tag
@@ -125,7 +125,7 @@ async function updateWar(bot, clash) {
 
 
 
-async function summarize(bot, war) { // подведение итогов
+async function summarizeWar(bot, war) { // подведение итогов
   if (war.state != 'warEnded') return; //не закончена - вышли
 
   let des;
@@ -176,47 +176,22 @@ async function summarize(bot, war) { // подведение итогов
   let countMembers = 0;
 
   for (const member of members) {
-    //console.log(member);
-
     if (member == null) continue;
 
     const player = await bot.Players.findById(member.tag);
 
     if (player == null) {
-      //console.log(member);
-      //console.log("ИГРОКА НЕТ В БАЗЕ!!!!!");
       continue;
     }
 
     let fieldValue = '';
 
-    const th = member.townHallLevel;
-    const pos = member.mapPosition;
     const attacks = member.attacks;
-
-    //console.log(attacks);
 
     if (attacks != null) {
       for (const attack of attacks) { //атаки
-        //console.log(attack);
 
-        const defender = await attack.defender;
-
-        //console.log(defender);
-
-        const opTh = defender.townHallLevel;
-        const opPos = defender.mapPosition;
-
-        let rate = (attack.stars * 300 + attack.destruction) / 1000; //коэффициент разрушения
-        
-        let difficult = 1000 + (opTh - th) * 200; //сложность атаки
-        if (opPos - pos > 5) difficult -= 250; //вычитаем не более 250 очков за атаку ниже
-        else difficult -= (opPos - pos) * 50;
-        
-        if (rate < 0.1) rate = 0.1;
-        if (difficult < 100) difficult = 100;
-
-        const score = Math.trunc(rate * difficult);
+        const score = calculateAttackScore(attack);
 
         await player.attacks.push({ score: score, date: war.endTime });
         await player.save();
@@ -252,7 +227,7 @@ async function summarize(bot, war) { // подведение итогов
   }
 }
 
-async function saveToDB (war, warDB) {
+async function saveWarToDB(war, warDB) {
   await warDB.set({ done: true });
   await warDB.set({ date: war.endTime });
   await warDB.set({ stars: war.clan.stars });
@@ -261,8 +236,8 @@ async function saveToDB (war, warDB) {
   await warDB.set({ opponentStars: war.opponent.stars });
   await warDB.set({ opponentDestruction: war.opponent.destruction.toFixed(2) });
   await warDB.set({ opponentAttackCount: war.opponent.attackCount });
-  await warDB.set({ isCWL:  war.isCWL});
-  
+  await warDB.set({ isCWL: war.isCWL });
+
   await warDB.save();
 }
 
@@ -277,4 +252,43 @@ function formatDate(date) {
   var yyyy = date.getFullYear();
 
   return dd + '.' + mm + '.' + yyyy;
+}
+
+function calculateAttackScore(attack) {
+  const member = attack.attacker;
+  const memberTh = member.townHallLevel;
+  const memberPos = member.mapPosition;
+  
+  const opponent = attack.defender;
+  const opponentTh = opponent.townHallLevel;
+  const opponentPos = opponent.mapPosition;
+
+  let rate =  900 + attack.destruction; //коэффициент разрушения
+  if (attack.stars == 2) rate -= 200;
+  else if (attack.stars == 1) rate -= 600;
+  else if (attack.stars == 0) rate -= 900;
+  rate /= 1000;
+
+  let difficult = 1000 + (opponentTh - memberTh) * 200; //сложность атаки, по уровням ратуши
+  
+  const insensitivity = 2; //кол-во невоспринмаемых позиций
+  const posCost = 50; //цена позиции
+  const maxPenaltyPos = 4; //максимально позиций для штрафа
+  let posDiff = opponentPos - memberPos; //разность позиций
+
+  if (Math.abs(posDiff) < insensitivity) { //если разница позиций меньше пороговой - обнуляем
+    posDiff = 0;
+  }
+  else if (posDiff > 0) { //если положительная - вычитаем пороговое
+    posDiff -= insensitivity;
+  }
+  else posDiff += insensitivity; //если отрицательная - прибавляем пороговое
+  
+  if (posDiff > maxPenaltyPos) difficult -= maxPenaltyPos * posCost; //вычитаем не более максимума за атаку вниз
+  else difficult -= posDiff * posCost; //вычитаем 
+
+  if (rate < 0.1) rate = 0.1; //минимальные
+  if (difficult < 100) difficult = 100;
+
+  return Math.trunc(rate * difficult);
 }
