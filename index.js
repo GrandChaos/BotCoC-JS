@@ -67,7 +67,7 @@ require('./events')(bot, clash);
 
 
 //автообновление
-require('./update.js')(bot, clash);
+require('./update')(bot, clash);
 
 
 //Подгрузка комманд

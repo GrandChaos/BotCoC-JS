@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js')
+const generalFunctions = require('../generalFunctions.js');
 
 module.exports = async (bot, clash, message, args, argsF) => {
   let clan;
@@ -70,7 +71,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     else if (warlog.at(i).result == "lose") warEmbed.setColor('RED');
     else warEmbed.setColor('GRAY');
     
-    let warDes = `Завершена: ${formatDate(warlog.at(i).endTime)}\n\
+    let warDes = `Завершена: ${generalFunctions.formatDate(warlog.at(i).endTime)}\n\
 Размер команды: ${warlog.at(i).teamSize}\n\
 Тип: `;
 
@@ -121,16 +122,3 @@ module.exports.interaction = {
   ],
   defaultPermission: true
 };
-
-function formatDate(date) {
-
-  var dd = date.getDate();
-  if (dd < 10) dd = '0' + dd;
-
-  var mm = date.getMonth() + 1;
-  if (mm < 10) mm = '0' + mm;
-
-  var yyyy = date.getFullYear();
-
-  return dd + '.' + mm + '.' + yyyy;
-}

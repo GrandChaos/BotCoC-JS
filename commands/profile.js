@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js')
+const generalFunctions = require('../generalFunctions.js');
 
 module.exports = async (bot, clash, message, args, argsF) => {
   let player;
@@ -29,8 +30,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
     const member = await clash.getPlayer(player._id);
 
     let date;
-    if (!player.hide) date = `Состоит в клане с ${formatDate(player.date)}`;
-    else date = `Покинул клан ${formatDate(player.date)}`;
+    if (!player.hide) date = `Состоит в клане с ${generalFunctions.formatDate(player.date)}`;
+    else date = `Покинул клан ${generalFunctions.formatDate(player.date)}`;
 
     let description = "```Очки | Дата\n"
 
@@ -47,7 +48,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
       else if (attack.score >= 10) description += "\u00A0" + attack.score + "\u00A0 | ";
       else description += "\u00A0\u00A0" + attack.score + "\u00A0 | ";
 
-      description += formatDate(attack.date) + "\n";
+      description += generalFunctions.formatDate(attack.date) + "\n";
     }
     description += "```";
 
@@ -98,16 +99,3 @@ module.exports.interaction = {
   ],
   defaultPermission: true
 };
-
-function formatDate(date) {
-
-  var dd = date.getDate();
-  if (dd < 10) dd = '0' + dd;
-
-  var mm = date.getMonth() + 1;
-  if (mm < 10) mm = '0' + mm;
-
-  var yyyy = date.getFullYear();
-
-  return dd + '.' + mm + '.' + yyyy;
-}
