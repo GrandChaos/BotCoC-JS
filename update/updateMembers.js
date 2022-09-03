@@ -11,7 +11,7 @@ module.exports = async (bot, clash) => {
 
     if (player == null) { //новичок
       const embed = new MessageEmbed()
-        .setColor('DARK_RED')
+        .setColor('GREEN')
         .setTitle(`Новичок - ${member.name}`)
         .setThumbnail(member.league.icon.url)
         .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}`)
@@ -29,7 +29,7 @@ module.exports = async (bot, clash) => {
 
     else if (player.hide) { //уже был в клане
       const embed = new MessageEmbed()
-        .setColor('DARK_RED')
+        .setColor('GREEN')
         .setTitle(`Старый знакомый - ${member.name}`)
         .setThumbnail(member.league.icon.url)
         .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\n\nПокинул клан: ${generalFunctions.formatDate(player.date)}`)
@@ -53,7 +53,12 @@ module.exports = async (bot, clash) => {
 
   players = await bot.Players.find(); //участники в базе
 
-  for (player of players) { //ищем ливнувших
+  for (let player of players) { //ищем ливнувших
+    /*
+    await player.set({ lastVote: 0 });
+    await player.save();
+    console.log(player.nickname);
+    */
     const member = clanMembers.find(m => m.tag === player._id);
     if (member == null && !player.hide) {
       bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул клан. Был участником с ${generalFunctions.formatDate(player.date)}.`);

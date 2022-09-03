@@ -1,21 +1,11 @@
 const { MessageEmbed } = require('discord.js')
+const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, message, args, argsF) => {
   players = await bot.Players.find();
 
   for (const player of players) {
-    let rating = 0;
-    let countAttacks = 0;
-
-    for (const attack of player.attacks) {
-      if (Date.now() - attack.date > 86400000 * 60) continue;
-      rating += attack.score;
-      countAttacks++;
-    }
-
-    rating = Math.trunc(rating / countAttacks);
-    player.rating = rating;
-    //console.log(player.rating);
+    player.rating = generalFunctions.getAttacksRating(player).rating;
   }
 
   players.sort(function(p1, p2) {

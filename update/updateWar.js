@@ -12,16 +12,14 @@ module.exports = async (bot, clash) => {
       curWar = await clash.getCurrentWar(bot.clanTag) //текущая война
       lastWar = await bot.Wars.find().limit(1).sort({ $natural: -1 }) //последний противник
       lastWar = lastWar[0];
-      //console.log(lastWar);
-      //console.log(curWar);
     }
     catch (err) {
-      console.log(err);
+      //console.log(err);
       return;
     }
   
     if (curWar == null || lastWar == null) return;
-  
+    
     if (curWar.state == 'warEnded' && lastWar.done) return; //если война окончена и уже обработано - выходим
   
     if (curWar.state != 'warEnded' && curWar.opponent.tag == lastWar.opponent) return; //если не завершена, и текущая война уже внесена - выходим
@@ -137,6 +135,7 @@ module.exports = async (bot, clash) => {
   
       for (var i = countAttacks; i < war.attacksPerMember; i++) { //пропущенные атаки
         await player.attacks.push({ score: 0, date: war.endTime });
+        await player.set({ lastVote: 0 });
         await player.save();
   
         fieldValue += 0 + '\n';
