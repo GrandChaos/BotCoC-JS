@@ -48,7 +48,7 @@ module.exports = async (bot, clash) => {
     // БЛОК С ПОВЫШЕНИЯМИ
 
     if (!member.isMember) continue; //если не мембер - скип
-    if (Date.now() - player.date < 86400000 * 14) continue; //если меньше 14 дней в клане - скип
+    if (Date.now() - player.date < 86400000 * 30) continue; //если меньше месяца в клане - скип
 
     if (member.league.id == 29000022) { //легендарная лига
       action = 'Повысить';

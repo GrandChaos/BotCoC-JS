@@ -36,7 +36,6 @@ module.exports = async (bot, clash) => {
     if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
       await summarizeWar(bot, curWar);
       await saveWarToDB(curWar, lastWar);
-  
       return;
     }
   

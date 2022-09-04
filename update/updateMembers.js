@@ -63,6 +63,7 @@ module.exports = async (bot, clash) => {
     if (member == null && !player.hide) {
       bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул клан. Был участником с ${generalFunctions.formatDate(player.date)}.`);
       await player.set({ hide: true });
+      await player.set({ lastVote: 0 });
       await player.set({ date: new Date() });
       await player.save();
     }
