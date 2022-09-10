@@ -16,5 +16,8 @@
     "install": "^0.13.0",
     "mongoose": "^6.4.4",
     "node-fetch": "^3.2.6"
+  },
+  "devDependencies": {
+    "@architect/sandbox": "^5.3.4"
   }
 }
