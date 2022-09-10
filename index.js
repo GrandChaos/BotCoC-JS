@@ -6,7 +6,7 @@ config.cfg.intents = new Discord.Intents(config.cfg.intents);
 
 //Запуск бота 
 const bot = new Discord.Client(config.cfg);
-bot.login(process.env['TOKEN'])
+bot.login(config.token)
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
 bot.version = {text: 'CW Rating Bot, v2.2'};
@@ -17,9 +17,8 @@ bot.clanTag = '#28QCVRVVL';
 
 
 //Подключение к БД
-//https://cloud.mongodb.com/v2/62d300eeb3bf144d48a206bc#clusters
 const mongoose = require('mongoose');
-const mongo_uri = `mongodb+srv://${process.env['MONGO_USERNAME']}:${process.env['MONGO_PASSWORD']}@botdb.9ekmvd5.mongodb.net/?retryWrites=true&w=majority`;
+const mongo_uri = `mongodb+srv://${config.mongo_username}:${config.mongo_password}@botdb.9ekmvd5.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.connect(mongo_uri)
   .then(()=>{console.log('Database connected!\n')})
   .catch((err)=>{console.log(`DB error: ${err}`)});
@@ -55,22 +54,22 @@ bot.Wars = model_1;
 //Api клеша
 const { Client } = require('clashofclans.js');
 const clash = new Client();
-clash.login({email: process.env['CLASH_EMAIL'], password: process.env['CLASH_PASSWORD']});
+clash.login({email: config.clash_email, password: config.clash_password});
 
 
 //HTTP cервер
-require('./keep_alive.js')
+//require('./keep_alive.js')
 
 
-//Cобытия
+//Cобытия discord
 require('./events')(bot, clash);
 
 
-//Синхонизация
+//Действия по расписанию
 require('./update')(bot, clash);
 
 
-//Подгрузка комманд
+//Подгрузка комманд discord
 bot.commands = new Discord.Collection();
 bot.commands.any = [];
 const commandFiles = fs.readdirSync('./commands');

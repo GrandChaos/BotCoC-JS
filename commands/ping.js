@@ -1,5 +1,5 @@
 module.exports = async (bot, clash, message, args, argsF) => {
-  message.reply(`I'm here!\n\Latency is ${Date.now() - message.createdTimestamp}ms.\n\API Latency is ${Math.round(bot.ws.ping)}ms`)
+  message.reply(`I'm here!\n\API Latency is ${Math.round(bot.ws.ping)}ms`)
 };
 
 module.exports.names = ["ping"]
