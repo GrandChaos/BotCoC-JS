@@ -13,6 +13,7 @@
     "clashofclans.js": "^2.8.2",
     "cron": "^2.1.0",
     "discord.js": "^13.10.3",
+    "dotenv": "^16.0.2",
     "install": "^0.13.0",
     "mongoose": "^6.4.4",
     "node-fetch": "^3.2.6"
