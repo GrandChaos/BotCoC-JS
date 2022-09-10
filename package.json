@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts" : { 
-    "test" : "jest" 
- },
+  "scripts": {
+    "test": "jest"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "discord.js": "^13.10.3",
     "dotenv": "^16.0.2",
     "install": "^0.13.0",
+    "jest": "^29.0.3",
     "mongoose": "^6.4.4",
     "node-fetch": "^3.2.6"
   },
