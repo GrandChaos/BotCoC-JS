@@ -3,7 +3,7 @@ const CronJob = require('cron').CronJob
 module.exports = (bot, clash) => {
 
   const updateMembers = new CronJob(
-    '*/10 * * * *',
+    '*/5 * * * *',
     () => require('./updateMembers')(bot, clash),
     null,
     true
