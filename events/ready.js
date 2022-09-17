@@ -1,5 +1,5 @@
 module.exports = async (bot) => {
-  console.log('\n', Date(), '\n')
+  console.log(Date(), '\n')
   console.log(bot.user.username + '#' + bot.user.discriminator, '\n')
 
   bot.user.setPresence({

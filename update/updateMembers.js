@@ -2,6 +2,8 @@ const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash) => {
+  generalFunctions.checkDiscordAPI(bot);
+  
   const clanMembers = await clash.getClanMembers(bot.clanTag); //текущие участники
 
   //ищем новичков

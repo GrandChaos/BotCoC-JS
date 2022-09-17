@@ -1,4 +1,5 @@
 require('dotenv').config();
+const generalFunctions = require('./generalFunctions.js');
 
 const Discord = require('discord.js'),
       fs = require('fs'),
@@ -16,6 +17,7 @@ bot.warChannel = '1007633975910613022';
 bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
 bot.clanTag = '#28QCVRVVL';
+setTimeout(() => generalFunctions.checkDiscordAPI(bot), 15000);
 
 
 //Подключение к БД
@@ -60,7 +62,7 @@ clash.login({email: process.env.CLASH_EMAIL, password: process.env.CLASH_PASSWOR
 
 
 //HTTP cервер
-//require('./keep_alive.js')
+require('./keep_alive.js')
 
 
 //Cобытия discord

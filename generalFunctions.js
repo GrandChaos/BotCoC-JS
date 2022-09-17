@@ -1,3 +1,5 @@
+const { exec } = require("child_process");
+
 function formatDate(date) {
 
   var dd = date.getDate();
@@ -44,9 +46,28 @@ function getAttacksRating(player) {
 }
 
 
+function checkDiscordAPI(bot) {
+  //console.log(bot.ws.ping);
+  if (!isNaN(bot.ws.ping)) return;
+  else {
+    console.log(`Stop time: ${Date()}`);
+    exec("kill 1", (error, stdout, stderr) => {
+      if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`stdout: ${stdout}`);
+    });
+  }
+}
 
 
 module.exports = {
   formatDate: formatDate,
-  getAttacksRating: getAttacksRating
+  getAttacksRating: getAttacksRating,
+  checkDiscordAPI: checkDiscordAPI
 };
