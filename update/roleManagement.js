@@ -1,8 +1,8 @@
 const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
-module.exports = async (bot, clash) => {
-  const clanMembers = await clash.getClanMembers(bot.clanTag);
+module.exports = async (bot, clash, clanMembers) => {
+  //const clanMembers = await clash.getClanMembers(bot.clanTag);
 
   for (const clanMember of clanMembers) {
     const player = await bot.Players.findById(clanMember.tag);

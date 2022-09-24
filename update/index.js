@@ -18,7 +18,7 @@ module.exports = (bot, clash) => {
 
   const roleManagement = new CronJob(
     '30 6 * * *',
-    () => require('./roleManagement')(bot, clash),
+    () => require('./roleManagement')(bot, clash, clash.getClanMembers(bot.clanTag)),
     null,
     true
   );
