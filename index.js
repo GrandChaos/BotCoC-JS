@@ -17,6 +17,7 @@ bot.warChannel = '1007633975910613022';
 bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
 bot.clanTag = '#28QCVRVVL';
+bot.academyTag = '#2G8YG0PV8';
 setTimeout(() => generalFunctions.checkDiscordAPI(bot), 15000);
 
 
@@ -30,6 +31,7 @@ mongoose.connect(mongo_uri)
 const Player = mongoose.Schema({
   _id: String,
   nickname: String,
+  clan: String,
   hide: {type: Boolean, default: false},
   attacks: [{date: {type: Date, default: Date.now}, score: Number}],
   warns: [{date: {type: Date, default: Date.now}, reason: String, value: Number}],
@@ -40,6 +42,7 @@ const model = mongoose.model('Player', Player, 'Players');
 bot.Players = model;
 
 const War = mongoose.Schema({
+  clan: String,
   opponent: String,
   done: {type: Boolean, default: false},
   date: Date,
