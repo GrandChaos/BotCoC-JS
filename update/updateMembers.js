@@ -135,8 +135,9 @@ module.exports = async (bot, clash) => {
   //чек ливнувших из основы
   for (let player of clanPlayers) {
     const member = clan.members.find(m => m.tag === player._id);
-    if (member == null && !player.hide) {
+    if (member == null) {
       bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул ${clan.name}. Был участником с ${generalFunctions.formatDate(player.date)}.`);
+      await player.set({ clan: null });
       await player.set({ hide: true });
       await player.set({ lastVote: 0 });
       await player.set({ date: new Date() });
@@ -147,8 +148,9 @@ module.exports = async (bot, clash) => {
   //чек ливнувших из академа
   for (let player of academyPlayers) {
     const member = academy.members.find(m => m.tag === player._id);
-    if (member == null && !player.hide) {
+    if (member == null) {
       bot.channels.cache.get(bot.logChannel).send(`Игрок ${player.nickname} покинул ${academy.name}. Был участником с ${generalFunctions.formatDate(player.date)}.`);
+      await player.set({ clan: null });
       await player.set({ hide: true });
       await player.set({ lastVote: 0 });
       await player.set({ date: new Date() });

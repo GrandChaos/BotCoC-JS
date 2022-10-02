@@ -1,17 +1,18 @@
 const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
-module.exports = async (bot, clash) => {
+module.exports = async (bot, clash, clanTag, channel, toRecord) => {
 
-  await updateWar(bot, clash);
+  await updateWar(bot, clash, clanTag, channel, toRecord);
   
-  async function updateWar(bot, clash) {
+  async function updateWar(bot, clash, clanTag, channel, toRecord) {
     let curWar;
     let lastWar;
     try {
-      curWar = await clash.getCurrentWar(bot.clanTag) //текущая война
-      lastWar = await bot.Wars.find().limit(1).sort({ $natural: -1 }) //последний противник
+      curWar = await clash.getCurrentWar(clanTag) //текущая война
+      lastWar = await bot.Wars.find({ clan: clanTag }).limit(1).sort({ $natural: -1 }) //последний противник
       lastWar = lastWar[0];
+      console.log(curWar);
     }
     catch (err) {
       //console.log(err);
@@ -26,6 +27,7 @@ module.exports = async (bot, clash) => {
   
     if (curWar.state != 'warEnded' && curWar.opponent.tag != lastWar.opponent && !curWar.isCWL) {//если не заврешена, и текущая война не внесена - вносим и выходим
       const newWar = new bot.Wars({
+        clan: clanTag,
         opponent: curWar.opponent.tag
       })
       await newWar.save();
@@ -34,7 +36,7 @@ module.exports = async (bot, clash) => {
     }
   
     if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
-      await summarizeWar(bot, curWar);
+      await summarizeWar(bot, curWar, channel, toRecord);
       await saveWarToDB(curWar, lastWar);
       require('./roleManagement')(bot, clash, curWar.clan.members);
       return;
@@ -42,12 +44,13 @@ module.exports = async (bot, clash) => {
   
     if (curWar.state == 'inWar' && curWar.isCWL && curWar.opponent.tag != lastWar.opponent) { //если начался следующий раунд ЛВК
       if (!lastWar.done) {
-        const prevRound = await clash.getCurrentWar({ clanTag: bot.clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
-        await summarizeWar(bot, prevRound); //обрабатыевем
+        const prevRound = await clash.getCurrentWar({ clanTag: clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
+        await summarizeWar(bot, prevRound, channel, toRecord); //обрабатыевем
         await saveWarToDB(prevRound, lastWar);
         require('./roleManagement')(bot, clash, curWar.clan.members);
       }
       const newWar = new bot.Wars({ //записываем новый раунд
+        clan: clanTag,
         opponent: curWar.opponent.tag
       })
       await newWar.save();
@@ -56,7 +59,7 @@ module.exports = async (bot, clash) => {
     }
   }
   
-  async function summarizeWar(bot, war) { // подведение итогов
+  async function summarizeWar(bot, war, channel, toRecord) { // подведение итогов
     if (war.state != 'warEnded') return; //не закончена - вышли
   
     let des;
@@ -104,6 +107,7 @@ module.exports = async (bot, clash) => {
   
   
     const members = await war.clan.members;
+    members.sort((a, b) => a.mapPosition - b.mapPosition);
     let countMembers = 0;
   
     for (const member of members) {
@@ -124,8 +128,10 @@ module.exports = async (bot, clash) => {
   
           const score = calculateAttackScore(attack);
   
-          await player.attacks.push({ score: score, date: war.endTime });
-          await player.save();
+          if (toRecord) {
+            await player.attacks.push({ score: score, date: war.endTime });
+            await player.save();
+          }
   
           fieldValue += score + '\n';
         }
@@ -135,26 +141,29 @@ module.exports = async (bot, clash) => {
       if (attacks != null) countAttacks = attacks.length;
   
       for (var i = countAttacks; i < war.attacksPerMember; i++) { //пропущенные атаки
-        await player.attacks.push({ score: 0, date: war.endTime });
-        await player.set({ lastVote: 0 });
-        await player.save();
+
+        if (toRecord) {
+          await player.attacks.push({ score: 0, date: war.endTime });
+          await player.set({ lastVote: 0 });
+          await player.save();
+        }
   
         fieldValue += 0 + '\n';
       }
   
       countMembers++;
-      if (countMembers <= 25) embedMembers_1.addFields({ name: member.name, value: fieldValue, inline: true });
-      else embedMembers_2.addFields({ name: member.name, value: fieldValue, inline: true });
+      if (countMembers <= 25) embedMembers_1.addFields({ name: `${member.mapPosition}. ${member.name}`, value: fieldValue, inline: true });
+      else embedMembers_2.addFields({ name: `${member.mapPosition}. ${member.name}`, value: fieldValue, inline: true });
   
     }
     if (countMembers <= 25) {
       embedMembers_1.setTimestamp().setFooter(bot.version);
-      bot.channels.cache.get(bot.warChannel).send({ embeds: [embedWar, embedMembers_1] });
+      bot.channels.cache.get(channel).send({ embeds: [embedWar, embedMembers_1] });
       return;
     }
     else {
       embedMembers_2.setTimestamp().setFooter(bot.version);
-      bot.channels.cache.get(bot.warChannel).send({ embeds: [embedWar, embedMembers_1, embedMembers_2] });
+      bot.channels.cache.get(channel).send({ embeds: [embedWar, embedMembers_1, embedMembers_2] });
       return;
     }
   }

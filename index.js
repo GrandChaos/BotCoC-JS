@@ -12,8 +12,9 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env.TOKEN)
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: 'CW Rating Bot, v2.2'};
+bot.version = {text: 'CW Rating Bot, v2.4'};
 bot.warChannel = '1007633975910613022';
+bot.warAcademyChannel = '1026084888568414238';
 bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
 bot.clanTag = '#28QCVRVVL';

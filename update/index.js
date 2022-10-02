@@ -9,12 +9,19 @@ module.exports = (bot, clash) => {
     true
   );
 
-/*  const updateWar = new CronJob(
-    '*10 * * * *',
-    () => require('./updateWar')(bot, clash),
+  const updateWar = new CronJob(
+    '*/10 * * * *',
+    () => require('./updateWar')(bot, clash, bot.clanTag, bot.warChannel, true),
     null,
     true
-  );*/
+  );
+
+  const updateWarAcademy = new CronJob(
+    '*/10 * * * *',
+    () => require('./updateWar')(bot, clash, bot.academyTag, bot.warAcademyChannel, false),
+    null,
+    true
+  );
 
   const roleManagement = new CronJob(
     '30 6 * * *',
