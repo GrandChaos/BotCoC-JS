@@ -64,7 +64,7 @@ module.exports = async (bot, clash) => {
       require('./roleManagement')(bot, clash, clanMember);
     }
 
-    else if (member.name != player.nickname && !player.hide) { //смена никнейма
+    else if (member.name != player.nickname && member.clan.tag == bot.clanTag) { //смена никнейма
       bot.channels.cache.get(bot.logChannel).send(`${player.nickname} сменил никнейм на ${member.name}`);
       await player.set({ nickname: member.name });
       await player.save();
@@ -121,7 +121,7 @@ module.exports = async (bot, clash) => {
       await player.save();
     }
 
-    else if (member.name != player.nickname && !player.hide) { //смена никнейма
+    else if (member.name != player.nickname && member.clan.tag == bot.academyTag) { //смена никнейма
       bot.channels.cache.get(bot.logChannel).send(`${player.nickname} сменил никнейм на ${member.name}`);
       await player.set({ nickname: member.name });
       await player.save();

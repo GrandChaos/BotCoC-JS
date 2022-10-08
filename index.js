@@ -2,8 +2,8 @@ require('dotenv').config();
 const generalFunctions = require('./generalFunctions.js');
 
 const Discord = require('discord.js'),
-      fs = require('fs'),
-      config = require('./config.json');
+  fs = require('fs'),
+  config = require('./config.json');
 config.cfg.intents = new Discord.Intents(config.cfg.intents);
 
 
