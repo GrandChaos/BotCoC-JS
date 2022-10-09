@@ -34,7 +34,7 @@ const Player = mongoose.Schema({
   nickname: String,
   clan: String,
   hide: {type: Boolean, default: false},
-  attacks: [{date: {type: Date, default: Date.now}, score: Number}],
+  attacks: [{date: {type: Date, default: Date.now}, score: Number, stars: {type: Number, default: null}}],
   warns: [{date: {type: Date, default: Date.now}, reason: String, value: Number}],
   lastVote: {type: Date, default: 0},
   date: {type: Date, default: Date.now}

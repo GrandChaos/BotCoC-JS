@@ -129,7 +129,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
           const score = calculateAttackScore(attack);
   
           if (toRecord) {
-            await player.attacks.push({ score: score, date: war.endTime });
+            await player.attacks.push({ score: score, stars: attack.stars, date: war.endTime });
             await player.save();
           }
   
@@ -143,7 +143,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
       for (var i = countAttacks; i < war.attacksPerMember; i++) { //пропущенные атаки
 
         if (toRecord) {
-          await player.attacks.push({ score: 0, date: war.endTime });
+          await player.attacks.push({ score: 0, stars: 0, date: war.endTime });
           await player.set({ lastVote: 0 });
           await player.save();
         }
