@@ -57,7 +57,6 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     if (player.clan) {
       const clan = await clash.getClan(player.clan);
-      console.log(clan)
       embed.setTitle(`${player.nickname} - ${clan.name}`);
     }
 

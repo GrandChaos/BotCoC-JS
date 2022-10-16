@@ -6,12 +6,13 @@ module.exports = async (bot, clash, message, args, argsF) => {
   if (args.clan_tag != null) {
     try {
       clan = await clash.getClan(args.clan_tag.toUpperCase());
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
     if (clan == null) {
-      message.reply("Клан не найден");
-      return;
+      if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academyTag);
+      else {
+        message.reply("Клан не найден");
+        return;
+      }
     }
   }
   else if (args[0] != null) {
@@ -21,8 +22,11 @@ module.exports = async (bot, clash, message, args, argsF) => {
       console.log(e);
     }
     if (clan == null) {
-      message.reply("Клан не найден");
-      return;
+      if (args[0].toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academyTag);
+      else {
+        message.reply("Клан не найден");
+        return;
+      }
     }
   }
   else clan = await clash.getClan(bot.clanTag);
