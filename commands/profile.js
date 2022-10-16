@@ -50,9 +50,17 @@ module.exports = async (bot, clash, message, args, argsF) => {
       .setFooter(bot.version)
       .setTimestamp()
 
-    if (attacksRating.countAttacks > 0) {
+    if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks == 0) {
       embed
         .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nДанные по атакам:\n${attacksRating.attacksTable}`)
+    }
+    else if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks > 0) {
+      embed
+        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nДанные по атакам:\n${attacksRating.attacksTable}\n\nАтаки в академе:\n${attacksRating.trainingAttacksTable}`)
+    }
+    else if (attacksRating.countAttacks == 0 && attacksRating.countTrainingAttacks > 0) {
+      embed
+        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nАтаки в академе:\n${attacksRating.trainingAttacksTable}`)
     }
 
     if (player.clan) {
