@@ -30,7 +30,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     const member = await clash.getPlayer(player._id);
 
     let date;
-    if (!player.hide) date = `Состоит в клане с ${generalFunctions.formatDate(player.date)}`;
+    if (player.clan) date = `Состоит в клане с ${generalFunctions.formatDate(player.date)}`;
     else date = `Покинул клан ${generalFunctions.formatDate(player.date)}`;
 
     const attacksRating = generalFunctions.getAttacksRating(player);
@@ -44,7 +44,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     const embed = new MessageEmbed()
       .setColor(color)
-      .setTitle(`Профиль игрока ${player.nickname}`)
+      .setTitle(`${player.nickname}`)
       .setThumbnail(member.league.icon.url)
       .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\n`)
       .setFooter(bot.version)
@@ -53,6 +53,12 @@ module.exports = async (bot, clash, message, args, argsF) => {
     if (attacksRating.countAttacks > 0) {
       embed
         .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nДанные по атакам:\n${attacksRating.attacksTable}`)
+    }
+
+    if (player.clan) {
+      const clan = await clash.getClan(player.clan);
+      console.log(clan)
+      embed.setTitle(`${player.nickname} - ${clan.name}`);
     }
 
     message.reply({ embeds: [embed] });

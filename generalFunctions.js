@@ -15,7 +15,7 @@ function formatDate(date) {
 
 
 function getAttacksRating(player) {
-  let attacksTable = "```Очки | Дата\n"
+  let attacksTable = "```Очки | Звёзды | Дата\n"
   let rating = 0;
   let countAttacks = 0;
   let countSkippedAttacks = 0;
@@ -30,6 +30,9 @@ function getAttacksRating(player) {
     else if (attack.score >= 100) attacksTable += "\u00A0" + attack.score + " | ";
     else if (attack.score >= 10) attacksTable += "\u00A0" + attack.score + "\u00A0 | ";
     else attacksTable += "\u00A0\u00A0" + attack.score + "\u00A0 | ";
+
+    if (attack.stars != null) attacksTable += `\u00A0\u00A0\u00A0${attack.stars}\u00A0\u00A0 | `
+    else attacksTable += '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 | '
 
     attacksTable += formatDate(attack.date) + "\n";
   }
