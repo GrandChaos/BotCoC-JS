@@ -35,12 +35,13 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     const attacksRating = generalFunctions.getAttacksRating(player);
 
-    let color = 'RED';
+    let color = 'GREY';
     if (attacksRating.rating >= 1000) color = 'PURPLE';
     else if (attacksRating.rating >= 800) color = 'BLUE';
     else if (attacksRating.rating >= 600) color = 'GREEN';
     else if (attacksRating.rating >= 400) color = 'YELLOW';
     else if (attacksRating.rating >= 200) color = 'ORANGE';
+    else if (attacksRating.rating < 200) color = 'RED';
 
     const embed = new MessageEmbed()
       .setColor(color)
@@ -60,7 +61,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     }
     else if (attacksRating.countAttacks == 0 && attacksRating.countTrainingAttacks > 0) {
       embed
-        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nАтаки в академе:\n${attacksRating.trainingAttacksTable}`)
+        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\n\nАтаки в академе:\n${attacksRating.trainingAttacksTable}`)
     }
 
     if (player.clan) {

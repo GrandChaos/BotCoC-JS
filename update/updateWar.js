@@ -137,7 +137,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
             await player.save();
           }
   
-          fieldValue += `${score} (${stars} зв.)` + '\n';
+          fieldValue += `${score} (${attack.stars} зв.)` + '\n';
         }
       }
   
@@ -156,7 +156,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
           await player.save();
         }
   
-        fieldValue += 0 + '\n';
+        fieldValue += "0 (0 зв.)" + '\n';
       }
   
       countMembers++;
