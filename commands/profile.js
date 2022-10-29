@@ -47,21 +47,61 @@ module.exports = async (bot, clash, message, args, argsF) => {
       .setColor(color)
       .setTitle(`${player.nickname}`)
       .setThumbnail(member.league.icon.url)
-      .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\n`)
+      .setDescription(`\
+Тег: ${player.id}\n\
+${date}\n\
+Уровень ТХ: ${member.townHallLevel}\n\
+Трофеев: ${member.trophies}\n\
+Уровень: ${member.expLevel}\n\
+Роль: ${member.role}\n\
+Рейтинговых атак: ${attacksRating.countAttacks}\n`)
       .setFooter(bot.version)
       .setTimestamp()
 
     if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks == 0) {
       embed
-        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nДанные по атакам:\n${attacksRating.attacksTable}`)
+        .setDescription(`\
+Тег: ${player.id}\n\
+${date}\n\
+Уровень ТХ: ${member.townHallLevel}\n\
+Трофеев: ${member.trophies}\n\
+Уровень: ${member.expLevel}\n\
+Роль: ${member.role}\n\
+Рейтинговых атак: ${attacksRating.countAttacks}\n\
+Звёзд в альянсе: ${attacksRating.totalStars}\n\
+Звёзд за атаку: ${attacksRating.starsRatio}\n\
+Средний рейтинг: ${attacksRating.rating}\n\n\
+Данные по атакам:\n${attacksRating.attacksTable}`)
     }
     else if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks > 0) {
       embed
-        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\nСредний показатель: ${attacksRating.rating}\n\nДанные по атакам:\n${attacksRating.attacksTable}\n\nАтаки в академе:\n${attacksRating.trainingAttacksTable}`)
+        .setDescription(`\
+Тег: ${player.id}\n\
+${date}\n\
+Уровень ТХ: ${member.townHallLevel}\n\
+Трофеев: ${member.trophies}\n\
+Уровень: ${member.expLevel}\n\
+Роль: ${member.role}\n\
+Рейтинговых атак: ${attacksRating.countAttacks}\n\
+Звёзд в альянсе: ${attacksRating.totalStars}\n\
+Звёзд за атаку: ${attacksRating.starsRatio}\n\
+Средний рейтинг: ${attacksRating.rating}\n\n\
+Данные по атакам:\n${attacksRating.attacksTable}\n\n\
+Атаки в академе:\n${attacksRating.trainingAttacksTable}`)
     }
     else if (attacksRating.countAttacks == 0 && attacksRating.countTrainingAttacks > 0) {
       embed
-        .setDescription(`Тег: ${player.id}\n${date}\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\nРоль: ${member.role}\nВсего атак: ${attacksRating.countAttacks}\n\nАтаки в академе:\n${attacksRating.trainingAttacksTable}`)
+        .setDescription(`\
+Тег: ${player.id}\n\
+${date}\n\
+Уровень ТХ: ${member.townHallLevel}\n\
+Трофеев: ${member.trophies}\n\
+Уровень: ${member.expLevel}\n\
+Роль: ${member.role}\n\
+Рейтинговых атак: ${attacksRating.countAttacks}\n\
+Звёзд в альянсе: ${attacksRating.totalStars}\n\
+Звёзд за атаку: ${attacksRating.starsRatio}\n\n\
+Атаки в академе:\n${attacksRating.trainingAttacksTable}`)
     }
 
     if (player.clan) {
