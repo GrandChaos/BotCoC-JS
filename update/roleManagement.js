@@ -20,11 +20,11 @@ module.exports = async (bot, clash, clanMembers) => {
     
     // БЛОК С ПОНИЖЕНИЯМИ И ИЗГНАНИЯМИ
     
-    if (attacksRating.countSkippedAttacks / attacksRating.countAttacks > 0.25) { //доля пропущенных атак больше 25%
+    if (attacksRating.countSkippedAttacks / attacksRating.countAttacks > 0.30) { //доля пропущенных атак больше 30%
       if (member.isMember) action = 'Изгнать';
       else if (member.isElder) action = 'Понизить';
       else continue;
-      reason = `Доля пропущенных атак больше 25% (пропущено ${attacksRating.countSkippedAttacks} из ${attacksRating.countAttacks})\nДанные по атакам:\n${attacksRating.attacksTable}`;
+      reason = `Доля пропущенных атак больше 30% (пропущено ${attacksRating.countSkippedAttacks} из ${attacksRating.countAttacks})\nДанные по атакам:\n${attacksRating.attacksTable}`;
 
       await publishVote(bot, member, action, reason, 'RED');
       await player.set({ lastVote: new Date() });

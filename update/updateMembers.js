@@ -4,13 +4,30 @@ const generalFunctions = require('../generalFunctions.js')
 module.exports = async (bot, clash) => {
   generalFunctions.checkDiscordAPI(bot);
 
-  const clan = await clash.getClan(bot.clanTag); 
-  const academy = await clash.getClan(bot.academyTag); 
+  let clan;
+  let academy;
+  try {
+    clan = await clash.getClan(bot.clanTag); 
+    academy = await clash.getClan(bot.academyTag); 
+  }
+  catch (err) {
+    console.log(err);
+    return;
+  }
 
   // чек основы
   for (const clanMember of clan.members) {
-    const member = await clash.getPlayer(clanMember.tag);
-    const player = await bot.Players.findById(clanMember.tag);
+    let member;
+    let player;
+    try {
+      //console.log(clanMember.tag);
+      member = await clash.getPlayer(clanMember.tag);
+      player = await bot.Players.findById(clanMember.tag);
+    }
+    catch (err) {
+      console.log(err);
+      return;
+    }
 
     if (player == null) { //новичок
       const embed = new MessageEmbed()
@@ -73,8 +90,15 @@ module.exports = async (bot, clash) => {
 
   //чек академа
   for (const clanMember of academy.members) {
-    const member = await clash.getPlayer(clanMember.tag);
-    const player = await bot.Players.findById(clanMember.tag);
+    try {
+      //console.log(clanMember.tag);
+      member = await clash.getPlayer(clanMember.tag);
+      player = await bot.Players.findById(clanMember.tag);
+    }
+    catch (err) {
+      console.log(err);
+      return;
+    }
 
     if (player == null) { //новичок
       const embed = new MessageEmbed()
