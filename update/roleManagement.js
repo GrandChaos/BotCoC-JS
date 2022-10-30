@@ -21,7 +21,7 @@ module.exports = async (bot, clash, clanMembers, reason) => {
     }
     catch (err) {
       console.log(err);
-      return;
+      continue;
     }
 
     if (player == null || player.clan == null) continue;
