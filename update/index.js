@@ -25,7 +25,7 @@ module.exports = (bot, clash) => {
 
   const roleManagement = new CronJob(
     '30 6 * * *',
-    () => require('./roleManagement')(bot, clash, null),
+    () => require('./roleManagement')(bot, clash, null, 'daily'),
     null,
     true
   );

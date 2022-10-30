@@ -38,7 +38,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
     if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
       await summarizeWar(bot, curWar, channel, toRecord);
       await saveWarToDB(curWar, lastWar);
-      if (toRecord) require('./roleManagement')(bot, clash, curWar.clan.members);
+      if (toRecord) require('./roleManagement')(bot, clash, curWar.clan.members, 'after war');
       return;
     }
   
@@ -47,7 +47,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
         const prevRound = await clash.getCurrentWar({ clanTag: clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
         await summarizeWar(bot, prevRound, channel, toRecord); //обрабатыевем
         await saveWarToDB(prevRound, lastWar);
-        if (toRecord) require('./roleManagement')(bot, clash, curWar.clan.members);
+        if (toRecord) require('./roleManagement')(bot, clash, curWar.clan.members, 'after war');
       }
       const newWar = new bot.Wars({ //записываем новый раунд
         clan: clanTag,
