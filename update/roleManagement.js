@@ -87,8 +87,6 @@ async function voteDaily(bot, player, member) {
   let action;
   let reason;
 
-  const attacksRating = generalFunctions.getAttacksRating(player);
-
   // БЛОК С ПОВЫШЕНИЯМИ
   if (!member.isMember) return; //если не мембер - скип
   if (Date.now() - player.date < 86400000 * 30) return; //если меньше месяца в клане - скип

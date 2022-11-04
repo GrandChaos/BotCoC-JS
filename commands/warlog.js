@@ -34,11 +34,11 @@ module.exports = async (bot, clash, message, args, argsF) => {
   if (args.count != null) count = args.count;
   else if (args[0] != null && typeof args[0] == "number" && args[0] <= 30) count = args[0];
   
-  let des = `Тег: ${clan.tag}\n\
-  Лига войн кланов: ${clan.warLeague.name}\n\
-  Побед: ${clan.warWins}\n\
-  Поражений: ${clan.warLosses}\n\
-  Ничьих: ${clan.warTies}\n\
+  let des = `Тег: ${clan.tag}
+  Лига войн кланов: ${clan.warLeague.name}
+  Побед: ${clan.warWins}
+  Поражений: ${clan.warLosses}
+  Ничьих: ${clan.warTies}
   Серия побед: ${clan.warWinStreak}`;
 
   const embed = new MessageEmbed()
@@ -73,8 +73,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
     else if (warlog.at(i).result == "lose") warEmbed.setColor('RED');
     else warEmbed.setColor('GRAY');
     
-    let warDes = `Завершена: ${generalFunctions.formatDate(warlog.at(i).endTime)}\n\
-Размер команды: ${warlog.at(i).teamSize}\n\
+    let warDes = `Завершена: ${generalFunctions.formatDate(warlog.at(i).endTime)}
+Размер команды: ${warlog.at(i).teamSize}
 Тип: `;
 
     if (warlog.at(i).isNormal) warDes += "Обычная";
@@ -83,11 +83,11 @@ module.exports = async (bot, clash, message, args, argsF) => {
     warEmbed.setDescription(warDes);
 
     warEmbed.addFields(
-		{ name: warlog.at(i).clan.name, value: `Звёзды: ${warlog.at(i).clan.stars}\n\
-Разрушение: ${warlog.at(i).clan.destruction.toFixed(2)}%\n\
+		{ name: warlog.at(i).clan.name, value: `Звёзды: ${warlog.at(i).clan.stars}
+Разрушение: ${warlog.at(i).clan.destruction.toFixed(2)}%
 Атак использовано: ${warlog.at(i).clan.attackCount}`,inline: true },
       
-		{ name: warlog.at(i).opponent.name, value: `Звёзды: ${warlog.at(i).opponent.stars}\n\
+		{ name: warlog.at(i).opponent.name, value: `Звёзды: ${warlog.at(i).opponent.stars}
 Разрушение: ${warlog.at(i).opponent.destruction.toFixed(2)}%`,inline: true },
 	)
 

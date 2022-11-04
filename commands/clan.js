@@ -29,24 +29,24 @@ module.exports = async (bot, clash, message, args, argsF) => {
   }
   else clan = await clash.getClan(bot.clanTag);
   
-  let des = `Тег: ${clan.tag}\n\
-  Очков: ${clan.points}\n\
-  Уровень: ${clan.level}\n\
-  Расположение: ${clan.location.name}\n\
-  Язык: ${clan.chatLanguage.name}\n\
-  Вид: ${clan.type}\n\
-  Трофеев для вступления: ${clan.requiredTrophies}\n\
-  ТХ для вступления: ${clan.requiredTownHallLevel}\n\
-  Участников: ${clan.memberCount}\n\
-  \n\
-  Участие в войнах: ${clan.warFrequency}\n\
-  Лига войн кланов: ${clan.warLeague.name}\n\
-  Побед: ${clan.warWins}\n\
-  Поражений: ${clan.warLosses}\n\
-  Ничьих: ${clan.warTies}\n\
-  Серия побед: ${clan.warWinStreak}\n\
-  \n\
-  ${clan.description}`;
+  let des = `Тег: ${clan.tag}
+Очков: ${clan.points}
+Уровень: ${clan.level}
+Расположение: ${clan.location.name}
+Язык: ${clan.chatLanguage.name}
+Вид: ${clan.type}
+Трофеев для вступления: ${clan.requiredTrophies}
+ТХ для вступления: ${clan.requiredTownHallLevel}
+Участников: ${clan.memberCount}
+\n\
+Участие в войнах: ${clan.warFrequency}
+Лига войн кланов: ${clan.warLeague.name}
+Побед: ${clan.warWins}
+Поражений: ${clan.warLosses}
+Ничьих: ${clan.warTies}
+Серия побед: ${clan.warWinStreak}
+\n\
+${clan.description}`;
 
   //console.log(clan);
   
