@@ -2,10 +2,11 @@ const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, message, args, argsF) => {
-  players = await bot.Players.find();
+  players = await bot.Players.find({ hide: false });
 
   for (const player of players) {
     player.rating = generalFunctions.getAttacksRating(player).rating;
+    player.starsRatio = generalFunctions.getAttacksRating(player).starsRatio;
   }
 
   players.sort(function(p1, p2) {
@@ -15,26 +16,26 @@ module.exports = async (bot, clash, message, args, argsF) => {
     return (p2.rating - p1.rating);
   })
 
-  let description = "```Номер | Рейтинг | Никнейм\n"
+  let description = "``` № | Рейт.| Ср. зв.| ТХ | Никнейм\n"
 
   let i = 1;
 
   for (const player of players) {
     if (isNaN(player.rating)) continue;
-    if (player.hide) continue;
+    //if (player.hide) continue;
 
-    //const member = await clash.getPlayer(player.id);
+    if (i >= 10) description += i++ + " | "
+    else description += "\u00A0" + i++ + " | "
 
-    if (i >= 10) description += "\u00A0" + i++ + "\u00A0\u00A0 | "
-    else description += "\u00A0" + i++ + "\u00A0\u00A0\u00A0 | "
+    if (player.rating >= 1000) description += player.rating + " | ";
+    else if (player.rating >= 100) description += "\u00A0" + player.rating + " | ";
+    else if (player.rating >= 10) description += "\u00A0" + player.rating + "\u00A0\ | ";
+    else description += "\u00A0\u00A0" + player.rating + "\u00A0 | ";
 
-    if (player.rating >= 1000) description += "\u00A0" + player.rating + "\u00A0\u00A0 | ";
-    else if (player.rating >= 100) description += "\u00A0\u00A0" + player.rating + "\u00A0\u00A0 | ";
-    else if (player.rating >= 10) description += "\u00A0\u00A0" + player.rating + "\u00A0\u00A0\u00A0\ | ";
-    else description += "\u00A0\u00A0\u00A0" + player.rating + "\u00A0\u00A0\u00A0 | ";
+    description += "\u00A0" + player.starsRatio + "\u00A0 | "
 
-    /*if (member.townHallLevel >= 10) description += member.townHallLevel + " | "
-    else description += member.townHallLevel + "\u00A0 + | "*/
+    if (player.th >= 10) description += player.th + " | ";
+    else description += player.th + "\u00A0 + | ";
 
     description += player.nickname + "\n";
   }

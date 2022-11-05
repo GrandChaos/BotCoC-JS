@@ -33,6 +33,7 @@ const Player = mongoose.Schema({
   _id: String,
   nickname: String,
   clan: String,
+  th: Number,
   hide: {type: Boolean, default: false},
   attacks: [{
     date: {type: Date, default: Date.now}, 

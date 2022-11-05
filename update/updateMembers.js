@@ -44,7 +44,8 @@ module.exports = async (bot, clash) => {
         _id: member.tag,
         nickname: member.name,
         clan: bot.clanTag,
-        hide: false
+        hide: false,
+        th: member.townHallLevel
       })
       await newPlayer.save();
     }
@@ -75,6 +76,7 @@ module.exports = async (bot, clash) => {
       await player.set({ clan: bot.clanTag });
       await player.set({ hide: false });
       await player.set({ date: new Date() });
+      await player.set({ th: member.townHallLevel });
       await player.save();
 
       clanMember[0] = clanMember;
@@ -84,6 +86,12 @@ module.exports = async (bot, clash) => {
     else if (member.name != player.nickname && member.clan.tag == bot.clanTag) { //смена никнейма
       bot.channels.cache.get(bot.logChannel).send(`${player.nickname} сменил никнейм на ${member.name}`);
       await player.set({ nickname: member.name });
+      await player.save();
+    }
+
+    else if (member.townHallLevel != player.th && member.clan.tag == bot.clanTag) { //ап тх
+      bot.channels.cache.get(bot.logChannel).send(`${player.nickname} достиг ${member.townHallLevel} уровня ТХ`);
+      await player.set({ th: member.townHallLevel });
       await player.save();
     }
   }
@@ -115,7 +123,8 @@ module.exports = async (bot, clash) => {
         _id: member.tag,
         nickname: member.name,
         clan: bot.academyTag,
-        hide: true
+        hide: true,
+        th: member.townHallLevel
       })
       await newPlayer.save();
     }
@@ -142,12 +151,19 @@ module.exports = async (bot, clash) => {
       await player.set({ clan: bot.academyTag });
       await player.set({ hide: true });
       await player.set({ date: new Date() });
+      await player.set({ th: member.townHallLevel });
       await player.save();
     }
 
     else if (member.name != player.nickname && member.clan.tag == bot.academyTag) { //смена никнейма
       bot.channels.cache.get(bot.logChannel).send(`${player.nickname} сменил никнейм на ${member.name}`);
       await player.set({ nickname: member.name });
+      await player.save();
+    }
+
+    else if (member.townHallLevel != player.th && member.clan.tag == bot.academyTag) { //ап тх
+      bot.channels.cache.get(bot.logChannel).send(`${player.nickname} достиг ${member.townHallLevel} уровня ТХ`);
+      await player.set({ th: member.townHallLevel });
       await player.save();
     }
   }
