@@ -66,7 +66,7 @@ ${date}
 Уровень ТХ: ${member.townHallLevel}
 Трофеев: ${member.trophies}
 Уровень: ${member.expLevel}
-Роль: ${member.role}\
+Роль: ${member.role}
 Рейтинговых атак: ${attacksRating.countAttacks}
 Звёзд в альянсе: ${attacksRating.totalStars}
 Звёзд за атаку: ${attacksRating.starsRatio}
@@ -103,7 +103,7 @@ ${date}
 Звёзд за атаку: ${attacksRating.starsRatio}\n
 Атаки в академе:\n${attacksRating.trainingAttacksTable}`)
     }
-
+    
     if (player.clan) {
       const clan = await clash.getClan(player.clan);
       embed.setTitle(`${player.nickname} - ${clan.name}`);
