@@ -10,7 +10,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
         const clan = await clash.getClan(args.clan_tag.toUpperCase());
         clanTag = clan.tag;
       } catch (e) {
-        console.log(e);
+        //console.log(e);
         message.reply('Клан не найден');
         return;
       }
@@ -23,13 +23,19 @@ module.exports = async (bot, clash, message, args, argsF) => {
         const clan = await clash.getClan(args[0].toUpperCase());
         clanTag = clan.tag;
       } catch (e) {
-        console.log(e);
+        //console.log(e);
         message.reply('Клан не найден');
         return;
       }
     }
   }
   else clanTag = bot.clanTag;
+
+  if (args.sort == false || args[1] == false || (args.sort == null && args[1] == null)) {
+    const args = [ 'byTrophies', bot.clanTag ];
+    require('../buttons/clanMembers')(bot, clash, message, args);
+    return;
+  }
 
   const row = new MessageActionRow()
     .addComponents([ 
@@ -62,7 +68,13 @@ module.exports.interaction = {
       description: "#Тег клана",
       type: "STRING",
       required: false
-    }
+    },
+    {
+      name: "sort",
+      description: "Необходима ли сортировка",
+      type: "BOOLEAN",
+      required: false
+    },
   ],
   defaultPermission: true
 };
