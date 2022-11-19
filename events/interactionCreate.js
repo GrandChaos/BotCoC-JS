@@ -1,7 +1,8 @@
 module.exports = async (bot, clash, interaction) => {
   if (interaction.isCommand()) command(bot, clash, interaction);
   if (interaction.isButton()) button(bot, clash, interaction);
-
+  if (interaction.isSelectMenu()) selectMenu(bot, clash, interaction);
+ 
   async function command (bot, clash, interaction) {
     const argsF = {}; //Создание аргументов
     argsF.slash = true;
@@ -20,5 +21,10 @@ module.exports = async (bot, clash, interaction) => {
   async function button (bot, clash, interaction) {
     const args = interaction.customId.split('_');    
     require(`../buttons/${args.shift()}`)(bot, clash, interaction, args);
+  }
+
+  async function selectMenu (bot, clash, interaction) {  
+    const args = interaction.values[0].split('_');
+    require(`../selectMenu/${interaction.customId}`)(bot, clash, interaction, args);
   }
 };

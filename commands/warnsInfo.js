@@ -54,7 +54,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     if (actualWarnsCount > 0) {
         des += `Текущие:
 ${actualWarnsTable}
-Всего предупреждений: ${actualWarnsCount}`;
+Всего предупреждений: ${actualWarnsCount}\n\n`;
     }
     if (notActualWarnsCount > 0) {
         des += `Неактуальные:\n ${notActualWarnsTable}`;
