@@ -38,12 +38,12 @@ const Player = mongoose.Schema({
   th: Number,
   hide: {type: Boolean, default: false},
   attacks: [{
-    date: {type: Date, default: Date.now}, 
-    score: {type: Number, default: null}, 
-    stars: {type: Number, default: null},
-    training: {type: Boolean, default: false},
+    date: { type: Date, default: Date.now }, 
+    score: { type: Number, default: null }, 
+    stars: { type: Number, default: null },
+    training: { type: Boolean, default: false },
   }],
-  warns: [{date: {type: Date, default: Date.now}, reason: String, value: Number}],
+  warns: [{ date: { type: Date, default: Date.now }, reason: String, amount: Number, actual: { type: Boolean, default: true } }],
   lastVote: {type: Date, default: 0},
   date: {type: Date, default: Date.now}
 })
