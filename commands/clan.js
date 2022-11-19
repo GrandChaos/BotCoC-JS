@@ -31,10 +31,10 @@ module.exports = async (bot, clash, message, args, argsF) => {
   
   let des = `Тег: ${clan.tag}
 Очков: ${clan.points}
-Уровень: ${clan.level}
-Расположение: ${clan.location.name}
-Язык: ${clan.chatLanguage.name}
-Вид: ${clan.type}
+Уровень: ${clan.level}\n`
+  if (clan.location != null ) des += `Расположение: ${clan.location.name}\n`
+  if (clan.chatLanguage != null ) des += `Язык: ${clan.chatLanguage.name}\n`
+des += `Вид: ${clan.type}
 Трофеев для вступления: ${clan.requiredTrophies}
 ТХ для вступления: ${clan.requiredTownHallLevel}
 Участников: ${clan.memberCount}
