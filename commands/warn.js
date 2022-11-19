@@ -1,8 +1,6 @@
-const { MessageEmbed } = require('discord.js')
-const generalFunctions = require('../generalFunctions.js');
-
 module.exports = async (bot, clash, message, args, argsF) => {
     const channel = '1043444739430690876';
+    let player;
 
     if (!message.member.permissions.has('MUTE_MEMBERS') || !args.slash || message.author.bot) {
         message.reply("Недостаточно прав для использования команды!");
@@ -29,7 +27,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     await player.warns.push({ amount: args.amount, reason: args.reason });
     await player.save();
 
-    bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку ${player.nickname} (${player._id}) по причине: ${args.reason}`);
+    bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);
     message.reply(`Предупреждения игроку ${player.nickname} выданы`);
 };
 
