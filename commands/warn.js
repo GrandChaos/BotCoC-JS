@@ -7,17 +7,26 @@ module.exports = async (bot, clash, message, args, argsF) => {
         return;
     }
 
-    if (argsF.nickname[0] == '#') {
-        player = await bot.Players.findById(args.nickname.toUpperCase());
+    if (args.slash && argsF.nickname[0] == '#') {
+      player = await bot.Players.findById(args.nickname.toUpperCase());
     }
-    else player = await bot.Players.find({ nickname: argsF.nickname });
-
-    if (player.length > 1) {
+    else if (!args.slash && argsF[0][0] == '#') {
+      player = await bot.Players.findById(args[0].toUpperCase());
+    }
+  
+    else {
+      if (args.slash) {
+        player = await bot.Players.find({ nickname: argsF.nickname });
+      }
+      else {
+        player = await bot.Players.find({ nickname: argsF[0] });
+      }
+      if (player.length > 1) {
         message.reply("Найдено несколько игроков, используйте #тег!");
         return;
+      }
+      player = player[0];
     }
-
-    player = player[0];
 
     if (player == null) {
         message.reply("Игрок не найден! Попробуйте использовать #тег.");

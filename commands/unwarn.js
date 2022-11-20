@@ -50,7 +50,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     }
 
     if (actualWarnsCount == 0) {
-        message.reply(`У игрока ${player.nickname} нет прежупреждений`);
+        message.reply(`У игрока ${player.nickname} нет предупреждений`);
         return;
     }
 
