@@ -14,11 +14,10 @@ module.exports = async (bot, clash, interaction, args) => {
 
     for (warn of player.warns) {
         if (warn._id.toString() == args[1]){
-            if (!warn.actual) {
-                interaction.reply("Предупреждение не найдено");
-                return;
-            }
-            await warn.set({ actual: false });
+            const user = bot.users.cache.find(user => user.id === args[2])
+            bot.channels.cache.get(channel).send(`${user.toString()} снял предупреждения с игрока **${player.nickname}** *(${player._id})* от ${generalFunctions.formatDate(warn.date)} с причиной: "${warn.reason}"`);
+            
+            await warn.set({ date: null });
             await player.save();
             break;
         }
@@ -29,9 +28,6 @@ module.exports = async (bot, clash, interaction, args) => {
         return;
     }
 
-    const user = bot.users.cache.find(user => user.id === args[2])
-
-    bot.channels.cache.get(channel).send(`${user.toString()} снял предупреждения с игрока ${player.nickname} от ${generalFunctions.formatDate(warn.date)} с причиной ${warn.reason}`);
     interaction.reply(`Предупреждения с игрока ${player.nickname} сняты`);
 };
 

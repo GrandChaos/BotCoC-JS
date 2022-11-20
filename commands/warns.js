@@ -37,7 +37,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
     let notActualWarnsCount = 0;
 
     for (const warn of player.warns) {
-        if (warn.actual) {
+        if (warn.date == null) continue;
+        if (Date.now() - warn.date < 86400000 * 60) {
             actualWarnsCount += warn.amount;
             actualWarnsTable += `${generalFunctions.formatDate(warn.date)} |    ${warn.amount}   | ${warn.reason}\n`;
         }
@@ -57,7 +58,7 @@ ${actualWarnsTable}
 Всего предупреждений: ${actualWarnsCount}\n\n`;
     }
     if (notActualWarnsCount > 0) {
-        des += `Неактуальные:\n ${notActualWarnsTable}`;
+        des += `История наказаний:\n ${notActualWarnsTable}`;
     }
     if (actualWarnsCount == 0 && notActualWarnsCount == 0) {
         des += `Предупреждений нет`;
@@ -74,9 +75,9 @@ ${actualWarnsTable}
 };
 
 
-module.exports.names = ["warns_info"]
+module.exports.names = ["warns"]
 module.exports.interaction = {
-  name: 'warns_info',
+  name: 'warns',
   description: 'Посмотреть предупреждения игрока',
   options: [
     {

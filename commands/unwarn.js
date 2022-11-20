@@ -39,7 +39,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     let options = [];
 
     for (const warn of player.warns) {
-        if (warn.actual) {
+        if (warn.date != null && Date.now() - warn.date < 86400000 * 60) {
             actualWarnsCount += warn.amount;
             options.push({
                 label: `${generalFunctions.formatDate(warn.date)} | ${warn.reason}`,
@@ -58,7 +58,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
         .addComponents([
             new MessageSelectMenu()
                 .setCustomId(`unwarn`)
-                .setPlaceholder(`Выбери предупреждение...`)
+                .setPlaceholder(`Выбери предупреждение`)
                 .addOptions(options)
                 .setMaxValues(1)
     ]);
