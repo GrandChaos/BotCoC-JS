@@ -40,8 +40,7 @@ bot.junior = {
 
 //bot.warChannel = '1007633975910613022';
 //bot.warAcademyChannel = '1026084888568414238';
-//bot.logChannel = '1005059293592174743';
-bot.logChannel = '1046474778451652638';
+bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
 //bot.clanTag = '#28QCVRVVL';
 //bot.academyTag = '#2G8YG0PV8';
