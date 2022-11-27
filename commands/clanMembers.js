@@ -4,7 +4,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
   let clanTag;
   
   if (args.clan_tag != null) {
-    if (args.clan_tag.toUpperCase() === "ACADEMY") clanTag = bot.academyTag;
+    if (args.clan_tag.toUpperCase() === "ACADEMY") clanTag = bot.academy.tag;
     else {
       try {
         const clan = await clash.getClan(args.clan_tag.toUpperCase());
@@ -17,7 +17,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     }
   }
   else if (args[0] != null) {
-    if (args[0].toUpperCase() === "ACADEMY") clanTag = bot.academyTag;
+    if (args[0].toUpperCase() === "ACADEMY") clanTag = bot.academy.tag;
     else {
       try {
         const clan = await clash.getClan(args[0].toUpperCase());
@@ -29,10 +29,10 @@ module.exports = async (bot, clash, message, args, argsF) => {
       }
     }
   }
-  else clanTag = bot.clanTag;
+  else clanTag = bot.stability.tag;
 
   if (args.sort == false || args[1] == false || (args.sort == null && args[1] == null)) {
-    const args = [ 'byTrophies', bot.clanTag ];
+    const args = [ 'byTrophies', bot.stability.tag ];
     require('../buttons/clanMembers')(bot, clash, message, args);
     return;
   }

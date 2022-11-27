@@ -8,7 +8,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
       clan = await clash.getClan(args.clan_tag.toUpperCase());
     } catch (e) {}
     if (clan == null) {
-      if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academyTag);
+      if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
       else {
         message.reply("Клан не найден");
         return;
@@ -20,14 +20,14 @@ module.exports = async (bot, clash, message, args, argsF) => {
       clan = await clash.getClan(args[0].toUpperCase());
     } catch (e) {}
     if (clan == null) {
-      if (args[0].toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academyTag);
+      if (args[0].toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
       else {
         message.reply("Клан не найден");
         return;
       }
     }
   }
-  else clan = await clash.getClan(bot.clanTag);
+  else clan = await clash.getClan(bot.stability.tag);
   
   let des = `Тег: ${clan.tag}
 Очков: ${clan.points}

@@ -57,14 +57,14 @@ module.exports.interaction = {
       description: "Количетство предупреждений",
       type: "INTEGER",
       min_value: 1,
-      max_value: 5,
+      max_value: 3,
       required: true
     },
     {
-        name: "reason",
-        description: "Причина",
-        type: "STRING",
-        required: true
+      name: "reason",
+      description: "Причина",
+      type: "STRING",
+      required: true
     }
   ],
   defaultPermission: true

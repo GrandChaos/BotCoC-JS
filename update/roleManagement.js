@@ -4,7 +4,7 @@ const generalFunctions = require('../generalFunctions.js')
 module.exports = async (bot, clash, clanMembers, reason) => {
   if (!clanMembers) {
     try {
-      clanMembers = await clash.getClanMembers(bot.clanTag);
+      clanMembers = await clash.getClanMembers(bot.stability.tag);
     }
     catch (err) {
       console.log(err);

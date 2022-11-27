@@ -12,16 +12,42 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env.TOKEN)
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: 'CW Rating Bot, v2.10'};
-bot.warChannel = '1007633975910613022';
-bot.warAcademyChannel = '1026084888568414238';
-bot.logChannel = '1005059293592174743';
+bot.version = {text: 'CW Rating Bot, v2.11'};
+
+bot.stability = {
+  tag: '#28QCVRVVL',
+  warChannel: '1007633975910613022',
+  icon: 'https://i.imgur.com/r3zOvF9.png',
+  url: 'https://alstability.ru/clubs/1-stability/',
+  hide: false,
+};
+
+bot.academy = {
+  tag: '#2G8YG0PV8',
+  warChannel: '1026084888568414238',
+  icon: 'https://i.imgur.com/qicV5CK.png',
+  url: 'https://alstability.ru/clubs/4-st-academy/',
+  hide: true,
+};
+
+bot.junior = {
+  tag: '#2LQQR8999',
+  warChannel: '1046475189401157652',
+  icon: 'https://i.imgur.com/iEFc8bu.png',
+  url: 'https://alstability.ru/clubs/4-st-academy/',
+  hide: true,
+};
+
+//bot.warChannel = '1007633975910613022';
+//bot.warAcademyChannel = '1026084888568414238';
+//bot.logChannel = '1005059293592174743';
+bot.logChannel = '1046474778451652638';
 bot.voteChannel = '1014928743153795104';
-bot.clanTag = '#28QCVRVVL';
-bot.academyTag = '#2G8YG0PV8';
-bot.stabilityEmoji = '<:stability:1001377287175929896>';
-bot.academEmoji = '<:Academ:1037000042415927328>';
-setTimeout(() => generalFunctions.checkDiscordAPI(bot), 15000);
+//bot.clanTag = '#28QCVRVVL';
+//bot.academyTag = '#2G8YG0PV8';
+//bot.stabilityEmoji = '<:stability:1001377287175929896>';
+//bot.academEmoji = '<:Academ:1037000042415927328>';
+setTimeout(() => require('./update/checkApi')(bot), 10000);
 
 
 //Подключение к БД
@@ -36,7 +62,7 @@ const Player = mongoose.Schema({
   nickname: String,
   clan: String,
   th: Number,
-  hide: { type: Boolean, default: false },
+  hide: { type: Boolean, default: true },
   attacks: [{
     date: { type: Date, default: Date.now }, 
     score: { type: Number, default: null }, 
