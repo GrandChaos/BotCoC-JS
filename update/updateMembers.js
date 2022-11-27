@@ -16,8 +16,8 @@ module.exports = async (bot, clash, clan) => {
   }
 
   setTimeout(newPlayers, 60000*0, bot, clash, clan, alliance, players, clashClan);
-  setTimeout(leftPlayers, 60000*0, bot, clash, clan, alliance, players, clashClan);
-  setTimeout(syncPlayers, 60000*0, bot, clan, players, clashClan);
+  setTimeout(leftPlayers, 60000*1, bot, clash, clan, alliance, players, clashClan);
+  setTimeout(syncPlayers, 60000*2, bot, clan, players, clashClan);
 
 
 
@@ -25,6 +25,7 @@ module.exports = async (bot, clash, clan) => {
     const notInPlayers = clashClan.members.filter(member => players.every(player => player._id != member.tag));
 
     for (const clanMember of notInPlayers) {
+      await asyncTimeout(1000);
       let member
       let player;
       try {
@@ -112,6 +113,7 @@ module.exports = async (bot, clash, clan) => {
     notInMembers = players.filter(player => clashClan.members.every(member => member.tag != player._id));
 
     for (let player of notInMembers) {
+      await asyncTimeout(1000);
       let member;
       try {
         member = await clash.getPlayer(player._id)
@@ -154,6 +156,7 @@ module.exports = async (bot, clash, clan) => {
 
   async function syncPlayers(bot, clan, players, clashClan) {
     for (let player of players) {
+      await asyncTimeout(1000);
       let member;
       try {
         member = await clash.getPlayer(player._id);
@@ -394,3 +397,9 @@ module.exports = async (bot, clash, clan) => {
     }
   }*/
 }
+
+export const asyncTimeout = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
