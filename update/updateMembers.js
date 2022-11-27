@@ -3,6 +3,8 @@ const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, clan) => {
 
+  await asyncTimeout(Math.floor(Math.random() * 10000));
+  
   let clashClan;
   let players;
   const alliance = [bot.stability, bot.academy, bot.junior];
@@ -25,13 +27,14 @@ module.exports = async (bot, clash, clan) => {
     const notInPlayers = clashClan.members.filter(member => players.every(player => player._id != member.tag));
 
     for (const clanMember of notInPlayers) {
-      await asyncTimeout(1000);
+      await asyncTimeout(500);
       let member
       let player;
       try {
         member = await clash.getPlayer(clanMember.tag);
         player = await bot.Players.findById(clanMember.tag);
       } catch (err) {
+        console.log('Функция новые игроки');
         console.log(err);
         return;
       }
@@ -113,11 +116,12 @@ module.exports = async (bot, clash, clan) => {
     notInMembers = players.filter(player => clashClan.members.every(member => member.tag != player._id));
 
     for (let player of notInMembers) {
-      await asyncTimeout(1000);
+      await asyncTimeout(500);
       let member;
       try {
         member = await clash.getPlayer(player._id)
       } catch (err) {
+        console.log('Функция ливнувшие игроки');
         console.log(err);
         return;
       }
@@ -156,11 +160,12 @@ module.exports = async (bot, clash, clan) => {
 
   async function syncPlayers(bot, clan, players, clashClan) {
     for (let player of players) {
-      await asyncTimeout(1000);
+      await asyncTimeout(500);
       let member;
       try {
         member = await clash.getPlayer(player._id);
       } catch (err) {
+        console.log('Функция синхронизации');
         console.log(err);
         return;
       }
@@ -197,6 +202,12 @@ module.exports = async (bot, clash, clan) => {
     }
     return;
   }
+
+  async function asyncTimeout (ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  };
 
 
 
@@ -397,9 +408,3 @@ module.exports = async (bot, clash, clan) => {
     }
   }*/
 }
-
-export const asyncTimeout = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};

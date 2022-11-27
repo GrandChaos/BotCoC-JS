@@ -10,21 +10,21 @@ module.exports = (bot, clash) => {
   );
 
   const updateMembers = new CronJob(
-    '* * * * *',
+    '*/5 * * * *',
     () => require('./updateMembers')(bot, clash, bot.stability),
     null,
     true
   );
 
   const updateMembersAcademy = new CronJob(
-    '* * * * *',
+    '*/5 * * * *',
     () => require('./updateMembers')(bot, clash, bot.academy),
     null,
     true
   );
 
   const updateMembersJunior = new CronJob(
-    '* * * * *',
+    '*/5 * * * *',
     () => require('./updateMembers')(bot, clash, bot.junior),
     null,
     true
