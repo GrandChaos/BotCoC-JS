@@ -44,6 +44,13 @@ module.exports = (bot, clash) => {
     true
   );
 
+  const updateWarJunior = new CronJob(
+    '*/10 * * * *',
+    () => require('./updateWar')(bot, clash, bot.junior.tag, bot.junior.warChannel, false),
+    null,
+    true
+  );
+
   const roleManagement = new CronJob(
     '30 6 * * *',
     () => require('./roleManagement')(bot, clash, null, 'daily'),
