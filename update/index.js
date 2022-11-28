@@ -4,7 +4,7 @@ module.exports = (bot, clash) => {
 
   const checkApi = new CronJob(
     '* * * * *',
-    () => require('./checkApi')(bot),
+    () => require('./checkApi')(bot, clash),
     null,
     true
   );

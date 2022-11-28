@@ -12,6 +12,13 @@ function formatDate(date) {
 }
 
 
+async function asyncTimeout (ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
+
+
 function getAttacksRating(player) {
   let attacksTable = "```Очки | Звёзды | Дата\n"
   let trainingAttacksTable = "```Очки | Звёзды | Дата\n"
@@ -81,4 +88,5 @@ function getAttacksRating(player) {
 module.exports = {
   formatDate: formatDate,
   getAttacksRating: getAttacksRating,
+  asyncTimeout: asyncTimeout,
 };

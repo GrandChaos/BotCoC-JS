@@ -1,9 +1,23 @@
 const { exec } = require("child_process");
 
 
-module.exports = async (bot) => {
-  if (!isNaN(bot.ws.ping)) return;
-  else {
+module.exports = async (bot, clash) => {
+  let discordApi = false;
+  let mongodb = false;
+  let clashApi = false
+
+  if (!isNaN(bot.ws.ping)) discordApi = true;
+
+  try {
+    const player = await bot.Players.findById('#Y88VUY8YR');
+    mongodb = true;
+  } catch(err) {
+    console.log(err);
+  }
+
+  if (!clash.inMaintenance) clashApi = true;
+
+  if (!discordApi || !mongodb || !clashApi) {
     console.log(`Stop time: ${Date()}`);
     exec("kill 1", (error, stdout, stderr) => {
       if (error) {

@@ -3,7 +3,7 @@ const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, clan) => {
 
-  await asyncTimeout(Math.floor(Math.random() * 10000));
+  await generalFunctions.asyncTimeout(Math.floor(Math.random() * 60000));
   
   let clashClan;
   let players;
@@ -27,7 +27,7 @@ module.exports = async (bot, clash, clan) => {
     const notInPlayers = clashClan.members.filter(member => players.every(player => player._id != member.tag));
 
     for (const clanMember of notInPlayers) {
-      await asyncTimeout(500);
+      await generalFunctions.asyncTimeout(1000);
       let member
       let player;
       try {
@@ -116,7 +116,7 @@ module.exports = async (bot, clash, clan) => {
     notInMembers = players.filter(player => clashClan.members.every(member => member.tag != player._id));
 
     for (let player of notInMembers) {
-      await asyncTimeout(500);
+      await generalFunctions.asyncTimeout(1000);
       let member;
       try {
         member = await clash.getPlayer(player._id)
@@ -160,7 +160,7 @@ module.exports = async (bot, clash, clan) => {
 
   async function syncPlayers(bot, clan, players, clashClan) {
     for (let player of players) {
-      await asyncTimeout(500);
+      await generalFunctions.asyncTimeout(500);
       let member;
       try {
         member = await clash.getPlayer(player._id);
@@ -202,16 +202,6 @@ module.exports = async (bot, clash, clan) => {
     }
     return;
   }
-
-  async function asyncTimeout (ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  };
-
-
-
-
 
   
   /*let clan;

@@ -3,6 +3,8 @@ const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, clanTag, channel, toRecord) => {
 
+  await generalFunctions.asyncTimeout(Math.floor(Math.random() * 60000));
+
   await updateWar(bot, clash, clanTag, channel, toRecord);
   
   async function updateWar(bot, clash, clanTag, channel, toRecord) {

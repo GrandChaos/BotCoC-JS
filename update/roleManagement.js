@@ -2,6 +2,8 @@ const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, clanMembers, reason) => {
+  await generalFunctions.asyncTimeout(Math.floor(Math.random() * 60000));
+
   if (!clanMembers) {
     try {
       clanMembers = await clash.getClanMembers(bot.stability.tag);

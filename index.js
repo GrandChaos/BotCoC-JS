@@ -12,7 +12,7 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env.TOKEN)
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: 'CW Rating Bot, v2.11'};
+bot.version = {text: '#ST Ultimate Bot, v2.11'};
 
 bot.stability = {
   tag: '#28QCVRVVL',
@@ -46,7 +46,6 @@ bot.voteChannel = '1014928743153795104';
 //bot.academyTag = '#2G8YG0PV8';
 //bot.stabilityEmoji = '<:stability:1001377287175929896>';
 //bot.academEmoji = '<:Academ:1037000042415927328>';
-setTimeout(() => require('./update/checkApi')(bot), 10000);
 
 
 //Подключение к БД
@@ -110,6 +109,9 @@ require('./events')(bot, clash);
 
 //Действия по расписанию
 require('./update')(bot, clash);
+
+//чек внешних интеграций
+setTimeout(() => require('./update/checkApi')(bot, clash), 10000);
 
 
 //Подгрузка комманд discord
