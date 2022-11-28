@@ -1,5 +1,3 @@
-const { exec } = require("child_process");
-
 function formatDate(date) {
 
   var dd = date.getDate();

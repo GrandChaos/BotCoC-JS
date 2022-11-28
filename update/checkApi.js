@@ -1,3 +1,6 @@
+const { exec } = require("child_process");
+
+
 module.exports = async (bot) => {
   if (!isNaN(bot.ws.ping)) return;
   else {
