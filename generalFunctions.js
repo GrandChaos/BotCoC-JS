@@ -6,6 +6,17 @@ function formatDate(date) {
   var mm = date.getMonth() + 1;
   if (mm < 10) mm = '0' + mm;
 
+  return dd + '.' + mm;
+}
+
+function formatDateFull(date) {
+
+  var dd = date.getDate();
+  if (dd < 10) dd = '0' + dd;
+
+  var mm = date.getMonth() + 1;
+  if (mm < 10) mm = '0' + mm;
+
   var yyyy = date.getFullYear();
 
   return dd + '.' + mm + '.' + yyyy;
@@ -87,6 +98,7 @@ function getAttacksRating(player) {
 
 module.exports = {
   formatDate: formatDate,
+  formatDateFull: formatDateFull,
   getAttacksRating: getAttacksRating,
   asyncTimeout: asyncTimeout,
 };

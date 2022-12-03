@@ -33,7 +33,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
         return;
     }
 
-    await player.warns.push({ amount: args.amount, reason: args.reason });
+    await player.warns.push({ amount: args.amount, reason: `${args.reason} (${message.author.username})` });
     await player.save();
 
     bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);

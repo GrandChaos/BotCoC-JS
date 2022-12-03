@@ -30,8 +30,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
     const member = await clash.getPlayer(player._id);
 
     let date;
-    if (player.clan) date = `Состоит в клане с ${generalFunctions.formatDate(player.date)}`;
-    else date = `Покинул клан ${generalFunctions.formatDate(player.date)}`;
+    if (player.clan) date = `Состоит в клане с ${generalFunctions.formatDateFull(player.date)}`;
+    else date = `Покинул клан ${generalFunctions.formatDateFull(player.date)}`;
 
     const attacksRating = generalFunctions.getAttacksRating(player);
 

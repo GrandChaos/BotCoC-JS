@@ -17,7 +17,7 @@ bot.version = {text: '#ST Ultimate Bot, v2.11'};
 bot.stability = {
   tag: '#28QCVRVVL',
   warChannel: '1007633975910613022',
-  icon: 'https://i.imgur.com/r3zOvF9.png',
+  icon: 'https://i.imgur.com/DL6lXEi.png',
   url: 'https://alstability.ru/clubs/1-stability/',
   hide: false,
 };
@@ -25,7 +25,7 @@ bot.stability = {
 bot.academy = {
   tag: '#2G8YG0PV8',
   warChannel: '1026084888568414238',
-  icon: 'https://i.imgur.com/qicV5CK.png',
+  icon: 'https://i.imgur.com/CpWkcT9.png',
   url: 'https://alstability.ru/clubs/4-st-academy/',
   hide: true,
 };
@@ -33,19 +33,13 @@ bot.academy = {
 bot.junior = {
   tag: '#2LQQR8999',
   warChannel: '1046475189401157652',
-  icon: 'https://i.imgur.com/iEFc8bu.png',
+  icon: 'https://i.imgur.com/Os3py3e.png',
   url: 'https://alstability.ru/clubs/4-st-academy/',
   hide: true,
 };
 
-//bot.warChannel = '1007633975910613022';
-//bot.warAcademyChannel = '1026084888568414238';
 bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
-//bot.clanTag = '#28QCVRVVL';
-//bot.academyTag = '#2G8YG0PV8';
-//bot.stabilityEmoji = '<:stability:1001377287175929896>';
-//bot.academEmoji = '<:Academ:1037000042415927328>';
 
 
 //Подключение к БД

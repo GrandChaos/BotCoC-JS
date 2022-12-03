@@ -30,8 +30,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
         return;
     }
 
-    let actualWarnsTable = '```   Дата    | Кол-во | Причина\n';
-    let notActualWarnsTable = '```   Дата    | Кол-во | Причина\n';
+    let actualWarnsTable = '``` Дата | Кол-во | Причина\n';
+    let notActualWarnsTable = '``` Дата | Кол-во | Причина\n';
 
     let actualWarnsCount = 0;
     let notActualWarnsCount = 0;
