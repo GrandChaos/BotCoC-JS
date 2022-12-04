@@ -84,7 +84,7 @@ module.exports = async (bot, clash, clanTag, channel, toRecord) => {
     }
     else des = '**Ничья**';
   
-    des += `\nЗавершена: ${generalFunctions.formatDate(war.endTime)}`;
+    des += `\nЗавершена: ${generalFunctions.formatDateFull(war.endTime)}`;
   
     const embedWar = new MessageEmbed() //итоги по войне
       .setColor(color)

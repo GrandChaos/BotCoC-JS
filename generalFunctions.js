@@ -95,10 +95,65 @@ function getAttacksRating(player) {
   }
 }
 
+function getPunishments(player) {
+  let countWarns = 0;
+  let countNotActualWarns = 0;
+  let warnsTable = '``` Дата | Кол-во | Причина\n';
+  let notActualWarnsTable = '```   Дата    | Кол-во | Причина\n';
+  let countBans = 0;
+  let countNotActualBans = 0;
+  let bansTable = '```Дата оконч.| Причина\n';
+  let notActualBansTable = '```Дата оконч.| Причина\n';
+
+  for (const warn of player.warns) {
+    if (warn.date == null) continue;
+    if (Date.now() - warn.date < 86400000 * 30) {
+      countWarns += warn.amount;
+      warnsTable += `${formatDate(warn.date)} |    ${warn.amount}   | ${warn.reason}\n`;
+    }
+    else {
+      countNotActualWarns += warn.amount;
+      notActualWarnsTable += `${formatDateFull(warn.date)} |    ${warn.amount}   | ${warn.reason}\n`;
+    }
+  }
+  warnsTable += '```';
+  notActualWarnsTable += '```';
+
+  for (const ban of player.bans) {
+    if (ban.dateBegin == null) continue;
+    if (ban.dateEnd == null) {
+      countBans++;
+      bansTable += `  Никогда  | ${ban.reason}\n`;
+    }
+    else if (Date.now() - ban.dateEnd < 0) {
+      countBans++;
+      bansTable += `${formatDateFull(ban.dateEnd)} | ${ban.reason}\n`;
+    }
+    else {
+      countNotActualBans++;
+      notActualBansTable += `${formatDateFull(ban.dateEnd)} | ${ban.reason}\n`;
+    }
+  }
+  bansTable += '```';
+  notActualBansTable += '```';
+
+  return {
+    countWarns: countWarns,
+    countNotActualWarns: countNotActualWarns,
+    warnsTable: warnsTable,
+    notActualWarnsTable: notActualWarnsTable,
+    countBans: countBans,
+    countNotActualBans: countNotActualBans,
+    bansTable: bansTable,
+    notActualBansTable: notActualBansTable,
+  }
+}
+
 
 module.exports = {
   formatDate: formatDate,
   formatDateFull: formatDateFull,
   getAttacksRating: getAttacksRating,
+  getPunishments: getPunishments,
   asyncTimeout: asyncTimeout,
 };

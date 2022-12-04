@@ -30,43 +30,28 @@ module.exports = async (bot, clash, message, args, argsF) => {
         return;
     }
 
-    let actualWarnsTable = '``` Дата | Кол-во | Причина\n';
-    let notActualWarnsTable = '``` Дата | Кол-во | Причина\n';
-
-    let actualWarnsCount = 0;
-    let notActualWarnsCount = 0;
-
-    for (const warn of player.warns) {
-        if (warn.date == null) continue;
-        if (Date.now() - warn.date < 86400000 * 60) {
-            actualWarnsCount += warn.amount;
-            actualWarnsTable += `${generalFunctions.formatDate(warn.date)} |    ${warn.amount}   | ${warn.reason}\n`;
-        }
-        else {
-            notActualWarnsCount += warn.amount;
-            notActualWarnsTable += `${generalFunctions.formatDate(warn.date)} |    ${warn.amount}   | ${warn.reason}\n`;
-        }
-    }
-    actualWarnsTable += '```';
-    notActualWarnsTable += '```';
-
     let des = '';
-
-    if (actualWarnsCount > 0) {
-        des += `Текущие:
-${actualWarnsTable}
-Всего предупреждений: ${actualWarnsCount}\n\n`;
+    const punish = generalFunctions.getPunishments(player);
+    
+    if (punish.countBans > 0) {
+      des += `Активные блокировки:\n${punish.bansTable}\n\n`;
     }
-    if (notActualWarnsCount > 0) {
-        des += `История наказаний:\n ${notActualWarnsTable}`;
+    if (punish.countNotActualBans > 0) {
+      des += `История блокировок:\n${punish.notActualBansTable}\n\n`
     }
-    if (actualWarnsCount == 0 && notActualWarnsCount == 0) {
-        des += `Предупреждений нет`;
+    if (punish.countWarns > 0) {
+      des += `Предупреждения:\n${punish.warnsTable}\nВсего предупреждений: ${punish.countWarns}\n\n`
+    }
+    if (punish.countNotActualWarns > 0) {
+      des += `История предупреждений: ${punish.notActualWarnsTable}\n\n`;
+    }
+    if (punish.countBans + punish.countNotActualBans + punish.countWarns + punish.countNotActualWarns == 0) {
+      des += 'Наказаний нет';
     }
 
     const embed = new MessageEmbed()
       .setColor('GREY')
-      .setTitle(`Предупреждения игрока ${player.nickname}`)
+      .setTitle(`Наказания игрока ${player.nickname}`)
       .setDescription(des)
       .setFooter(bot.version)
       .setTimestamp()
@@ -75,10 +60,10 @@ ${actualWarnsTable}
 };
 
 
-module.exports.names = ["warns"]
+module.exports.names = ["punish"]
 module.exports.interaction = {
-  name: 'warns',
-  description: 'Посмотреть предупреждения игрока',
+  name: 'punish',
+  description: 'Посмотреть наказания игрока',
   options: [
     {
       name: "nickname",

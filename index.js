@@ -62,10 +62,9 @@ const Player = mongoose.Schema({
     training: { type: Boolean, default: false },
   }],
   warns: [{ date: { type: Date, default: Date.now }, reason: String, amount: Number }],
+  bans: [{ dateBegin: { type: Date, default: Date.now }, dateEnd: Date,  reason: String }],
   lastVote: { type: Date, default: 0 },
   date: { type: Date, default: Date.now },
-  ban: { type: String, default: null },
-  banDate: { type: Date, default: null },
 })
 const model = mongoose.model('Player', Player, 'Players');
 bot.Players = model;
