@@ -30,4 +30,3 @@ module.exports = async (bot, clash, interaction, args) => {
 
     interaction.reply(`Предупреждения с игрока ${player.nickname} сняты`);
 };
-

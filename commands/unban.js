@@ -4,7 +4,7 @@ const generalFunctions = require('../generalFunctions.js')
 module.exports = async (bot, clash, message, args, argsF) => {
     let player;
 
-    if (!message.member.permissions.has('MUTE_MEMBERS') || !args.slash || message.author.bot) {
+    if (!message.member.permissions.has('BAN_MEMBERS') || !args.slash || message.author.bot) {
         message.reply("Недостаточно прав для использования команды!");
         return;
     }
@@ -35,41 +35,48 @@ module.exports = async (bot, clash, message, args, argsF) => {
       return;
     }
 
-    let actualWarnsCount = 0;
+    let countBans = 0;
     let options = [];
 
-    for (const warn of player.warns) {
-      if (warn.date != null && Date.now() - warn.date < 86400000 * 60) {
-        actualWarnsCount += warn.amount;
+    for (const ban of player.bans) {
+      if (ban.dateBegin != null && ban.dateEnd == null) {
+        countBans++;
         options.push({
-          label: `${generalFunctions.formatDate(warn.date)} | ${warn.reason}`,
-          value: `${player._id}_${warn._id.toString()}_${message.author.id}`
+          label: `Вечная | ${ban.reason}`,
+          value: `${player._id}_${ban._id.toString()}_${message.author.id}`
+        });
+      }
+      else if (ban.dateBegin != null && ban.dateEnd > Date.now()) {
+        countBans++;
+        options.push({
+          label: `${generalFunctions.formatDateFull(ban.dateEnd)} | ${ban.reason}`,
+          value: `${player._id}_${ban._id.toString()}_${message.author.id}`
         });
       }
     }
 
-    if (actualWarnsCount == 0) {
-        message.reply(`У игрока ${player.nickname} нет предупреждений`);
+    if (countBans == 0) {
+        message.reply(`У игрока ${player.nickname} нет блокировок`);
         return;
     }
 
     const row = new MessageActionRow()
-      .addComponents([
-        new MessageSelectMenu()
-          .setCustomId(`unwarn`)
-          .setPlaceholder(`Выбери предупреждение`)
-          .addOptions(options)
-          .setMaxValues(1)
+        .addComponents([
+            new MessageSelectMenu()
+            .setCustomId(`unban`)
+            .setPlaceholder(`Выбери блокировку`)
+            .addOptions(options)
+            .setMaxValues(1)
     ]);
 
-    message.reply({ content: 'Выбери предупреждение, которое необходимо снять', components: [row], ephemeral: true });
+    message.reply({ content: 'Выбери блокировку, которую необходимо снять', components: [row], ephemeral: true });
 };
 
 
-module.exports.names = ["unwarn"]
+module.exports.names = ["unban"]
 module.exports.interaction = {
-  name: 'unwarn',
-  description: 'Снять предупреждения с игрока',
+  name: 'unban',
+  description: 'Снять блокировку с игрока',
   options: [
     {
       name: "nickname",
