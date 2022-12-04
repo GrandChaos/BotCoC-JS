@@ -67,7 +67,7 @@ module.exports = async (bot, clash, clan) => {
           .setAuthor({ name: clashClan.name, iconURL: clan.icon, url: clan.url })
           .setTitle(`Старый знакомый - ${member.name}`)
           .setThumbnail(member.league.icon.url)
-          .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\n\nПокинул клан: ${generalFunctions.formatDate(player.date)}`)
+          .setDescription(`**Краткая информация**\nУровень ТХ: ${member.townHallLevel}\nТрофеев: ${member.trophies}\nУровень: ${member.expLevel}\n\nПокинул клан: ${generalFunctions.formatDateFull(player.date)}`)
           .setFooter(bot.version)
           .setTimestamp()
   
@@ -142,7 +142,7 @@ module.exports = async (bot, clash, clan) => {
         .setAuthor({ name: clashClan.name, iconURL: clan.icon, url: clan.url })
         .setTitle(`${member.name} покинул клан`)
         .setThumbnail(member.league.icon.url)
-        .setDescription(`Был участником с ${generalFunctions.formatDate(player.date)}`)
+        .setDescription(`Был участником с ${generalFunctions.formatDateFull(player.date)}`)
         .setFooter(bot.version)
         .setTimestamp()
 
