@@ -1,3 +1,5 @@
+const { MessageActionRow, MessageButton } = require('discord.js');
+
 function formatDate(date) {
 
   var dd = date.getDate();
@@ -152,10 +154,41 @@ function getPunishments(player) {
 }
 
 
+function createChooseClanMessage(bot) {
+  let channel = '1001388048799518741';
+
+  let roleStability = '1056570053186822244';
+  let roleAcademy = '1056572135369351218';
+  let roleJunior = '1056573821592801291';
+
+  const row = new MessageActionRow()
+  .addComponents([ 
+    new MessageButton()
+      .setCustomId(`giveRole_${roleStability}`)
+      .setLabel('#STABILITY')
+      .setStyle(1),
+      
+    new MessageButton()
+      .setCustomId(`giveRole_${roleAcademy}`)
+      .setLabel('#ST Academy')
+      .setStyle(1),
+
+    new MessageButton()
+      .setCustomId(`giveRole_${roleJunior}`)
+      .setLabel('#ST Junior')
+      .setStyle(1),
+
+  ]);
+
+  bot.channels.cache.get(channel).send({ content: 'Выбери клан (или кланы), в котором состоишь, чтобы получить соответствующую роль. Повторное нажатие снимет роль', components: [row] });
+}
+
+
 module.exports = {
   formatDate: formatDate,
   formatDateFull: formatDateFull,
   getAttacksRating: getAttacksRating,
   getPunishments: getPunishments,
   asyncTimeout: asyncTimeout,
+  createChooseClanMessage: createChooseClanMessage,
 };
