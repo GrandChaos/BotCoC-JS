@@ -9,6 +9,7 @@ function formatDate(date) {
   return dd + '.' + mm;
 }
 
+
 function formatDateFull(date) {
 
   var dd = date.getDate();
@@ -94,6 +95,7 @@ function getAttacksRating(player) {
     trainingAttacksTable: trainingAttacksTable
   }
 }
+
 
 function getPunishments(player) {
   let countWarns = 0;
