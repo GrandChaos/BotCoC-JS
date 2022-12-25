@@ -1,3 +1,5 @@
+const generalFunctions = require("../generalFunctions");
+
 module.exports = async (bot, clash, message, args, argsF) => {
     const channel = '1043444739430690876';
     let player;
@@ -36,8 +38,10 @@ module.exports = async (bot, clash, message, args, argsF) => {
     await player.warns.push({ amount: args.amount, reason: `${args.reason} (${message.author.username})` });
     await player.save();
 
+    let countWarns = generalFunctions.getPunishments(player).countWarns;
+
     bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);
-    message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"`);
+    message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"\nВсего предупреждений: ${countWarns}`);
 };
 
 

@@ -28,5 +28,7 @@ module.exports = async (bot, clash, interaction, args) => {
         return;
     }
 
-    interaction.reply(`Предупреждения с игрока ${player.nickname} сняты`);
+    let countWarns = generalFunctions.getPunishments(player).countWarns;
+
+    interaction.reply(`Предупреждения с игрока ${player.nickname} сняты\nОсталось предупреждений: ${countWarns}`);
 };
