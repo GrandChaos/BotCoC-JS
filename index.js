@@ -62,6 +62,7 @@ const Player = mongoose.Schema({
     training: { type: Boolean, default: false },
   }],
   warns: [{ date: { type: Date, default: Date.now }, reason: String, amount: Number }],
+  warnsLimit: { type: Number, default: 2 },
   bans: [{ dateBegin: { type: Date, default: Date.now }, dateEnd: Date,  reason: String }],
   lastVote: { type: Date, default: 0 },
   date: { type: Date, default: Date.now },
@@ -121,3 +122,13 @@ for (const file of commandFiles) {
 
 //Сообщение с выбором роли для клана
 //setTimeout(() => generalFunctions.createChooseClanMessage(bot), 10000);
+
+
+/*setTimeout((async () => {
+  let players = await bot.Players.find();
+  for (let player of players){
+    player.warnsLimit = 2;
+    player.save();
+    console.log(player.nickname);
+  }
+}), 10000);*/

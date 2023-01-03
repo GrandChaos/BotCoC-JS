@@ -41,7 +41,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
     let countWarns = generalFunctions.getPunishments(player).countWarns;
 
     bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);
-    message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"\nВсего предупреждений: ${countWarns}`);
+    message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"\nВсего предупреждений: ${countWarns}\nЛимит предупреждений: ${player.warnsLimit}`);
 };
 
 
