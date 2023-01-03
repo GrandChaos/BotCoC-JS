@@ -37,11 +37,12 @@ module.exports = async (bot, clash, message, args, argsF) => {
       des += `Активные блокировки:\n${punish.bansTable}\n\n`;
     }
     if (punish.countNotActualBans > 0) {
-      des += `История блокировок:\n${punish.notActualBansTable}\n\n`
+      des += `История блокировок:\n${punish.notActualBansTable}\n\n`;
     }
     if (punish.countWarns > 0) {
-      des += `Предупреждения:\n${punish.warnsTable}\nВсего предупреждений: ${punish.countWarns}\n\n`
+      des += `Предупреждения:\n${punish.warnsTable}\nВсего предупреждений: ${punish.countWarns}\n`;
     }
+    des += `Лимит предупреждений: ${player.warnsLimit}\n\n`;
     if (punish.countNotActualWarns > 0) {
       des += `История предупреждений: ${punish.notActualWarnsTable}\n\n`;
     }
