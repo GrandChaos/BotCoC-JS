@@ -12,7 +12,7 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env.TOKEN)
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: '#ST Ultimate Bot, v2.12'};
+bot.version = {text: '#ST Ultimate Bot, v2.13'};
 
 bot.stability = {
   tag: '#28QCVRVVL',
@@ -70,6 +70,18 @@ const Player = mongoose.Schema({
 const model = mongoose.model('Player', Player, 'Players');
 bot.Players = model;
 
+const Clan = mongoose.Schema({
+  tag: String,
+  keyWord: String,
+  warChannel: String,
+  icon: String,
+  url: String,
+  hide: Boolean,
+  role: String,
+})
+const model_1 = mongoose.model('Clan', Clan, 'Clans');
+bot.Clans = model_1;
+
 const War = mongoose.Schema({
   clan: String,
   opponent: String,
@@ -83,8 +95,8 @@ const War = mongoose.Schema({
   opponentAttackCount: Number,
   isCWL: Boolean,
 })
-const model_1 = mongoose.model('War', War, 'Wars');
-bot.Wars = model_1;
+const model_2 = mongoose.model('War', War, 'Wars');
+bot.Wars = model_2;
 
 
 //Api клеша
@@ -104,6 +116,7 @@ require('./events')(bot, clash);
 //Действия по расписанию
 require('./update')(bot, clash);
 
+
 //чек внешних интеграций
 setTimeout(() => require('./update/checkApi')(bot, clash), 10000);
 
@@ -120,15 +133,49 @@ for (const file of commandFiles) {
   bot.commands.any.push(command);
 }
 
+
+//создание кланов в БД
+/*setTimeout((async () => {
+  let Stability = new bot.Clans({
+    tag: '#28QCVRVVL',
+    keyWord: '',
+    warChannel: '1007633975910613022',
+    icon: 'https://i.imgur.com/DL6lXEi.png',
+    url: 'https://alstability.ru/clubs/1-stability/',
+    hide: false,
+    role: '1056570053186822244',
+  })
+  await Stability.save();
+  console.log('stability');
+
+
+  let Academy = new bot.Clans({
+    tag: '#2G8YG0PV8',
+    keyWord: 'academy',
+    warChannel: '1026084888568414238',
+    icon: 'https://i.imgur.com/CpWkcT9.png',
+    url: 'https://alstability.ru/clubs/4-st-academy/',
+    hide: true,
+    role: '1056572135369351218',
+  })
+  await Academy.save();
+  console.log('academy');
+
+
+  let Junior = new bot.Clans({
+    tag: '#2LQQR8999',
+    keyWord: 'junior',
+    warChannel: '1046475189401157652',
+    icon: 'https://i.imgur.com/Os3py3e.png',
+    url: 'https://alstability.ru/clubs/4-st-academy/',
+    hide: true,
+    role: '1056573821592801291',
+  })
+  await Junior.save();
+  console.log('junior');
+
+}), 10000);*/
+
+
 //Сообщение с выбором роли для клана
 //setTimeout(() => generalFunctions.createChooseClanMessage(bot), 10000);
-
-
-/*setTimeout((async () => {
-  let players = await bot.Players.find();
-  for (let player of players){
-    player.warnsLimit = 2;
-    player.save();
-    console.log(player.nickname);
-  }
-}), 10000);*/

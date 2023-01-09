@@ -50,6 +50,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
         bot.channels.cache.get(channel).send(`${message.author.toString()} заблокировал навсегда игрока **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);
         message.reply(`Игрок ${player.nickname} заблокирован навсегда\nПричина: "${args.reason}"`);
     }
+
+    require('./checkPunish')(bot, player, message);
 };
 
 

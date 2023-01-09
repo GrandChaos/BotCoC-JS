@@ -3,7 +3,7 @@ const CronJob = require('cron').CronJob
 module.exports = (bot, clash) => {
 
   const checkApi = new CronJob(
-    '* * * * *',
+    '*/3 * * * *',
     () => require('./checkApi')(bot, clash),
     null,
     true

@@ -59,9 +59,9 @@ module.exports.interaction = {
         description: "Лимит предупреждений",
         type: "INTEGER",
         min_value: 2,
-        max_value: 5,
+        max_value: 7,
         required: true
-      },
+    },
   ],
   defaultPermission: true
 };

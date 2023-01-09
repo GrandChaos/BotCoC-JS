@@ -42,6 +42,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);
     message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"\nВсего предупреждений: ${countWarns}\nЛимит предупреждений: ${player.warnsLimit}`);
+
+    require('./checkPunish')(bot, player, message);
 };
 
 
@@ -61,7 +63,7 @@ module.exports.interaction = {
       description: "Количетство предупреждений",
       type: "INTEGER",
       min_value: 1,
-      max_value: 3,
+      max_value: 7,
       required: true
     },
     {

@@ -22,7 +22,6 @@ module.exports = async (bot, clash, clan) => {
   setTimeout(syncPlayers, 60000*2, bot, clan, players, clashClan);
 
 
-
   async function newPlayers(bot, clash, clan, alliance, players, clashClan ) {
     const notInPlayers = clashClan.members.filter(member => players.every(player => player._id != member.tag));
 
@@ -90,6 +89,7 @@ module.exports = async (bot, clash, clan) => {
               console.log(err);
               return;
             }
+            if (clashClan.tag == prevClan.tag) return;
             const embed = new MessageEmbed()
               .setColor('GREEN')
               .setAuthor({ name: clashClan.name, iconURL: clan.icon, url: clan.url })
@@ -102,11 +102,14 @@ module.exports = async (bot, clash, clan) => {
             bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
             
             await player.set({ clan: clan.tag });
-            await player.set({ hide: clan.hide })
+            await player.set({ hide: clan.hide });
             await player.save();
           }
         }
       }
+
+      require('./checkPunish')(bot, player);
+
     }
     return;
   };
@@ -187,7 +190,7 @@ module.exports = async (bot, clash, clan) => {
 
       if (player.th != member.townHallLevel) {
         const embed = new MessageEmbed()
-          .setColor('GREEN')
+          .setColor('YELLOW')
           .setAuthor({ name: clashClan.name, iconURL: clan.icon, url: clan.url })
           .setThumbnail(member.league.icon.url)
           .setTitle(`${player.nickname} перешел на ${member.townHallLevel} ТХ`)
