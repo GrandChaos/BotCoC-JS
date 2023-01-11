@@ -5,9 +5,6 @@ module.exports = async (bot, player) => {
     const logChannel = '1043444739430690876';
     const alertChannel = '1043848031470092398';
 
-    if (player == null || player.clan == null) return;
-
-
     if (punish.countWarns >= player.warnsLimit && punish.countBans == 0) {
         let dateEnd = new Date();
         dateEnd.setDate(dateEnd.getDate() + 30);
@@ -18,6 +15,8 @@ module.exports = async (bot, player) => {
         bot.channels.cache.get(logChannel).send(`Автоматически заблокирован игрок **${player.nickname}** *(${player._id})* по причине: "${punish.countWarns}/${player.warnsLimit} предупреждений"`);
         punish = generalFunctions.getPunishments(player);
     }
+
+    if (player == null || player.clan == null) return;
 
     if (punish.countBans > 0 && player.clan != null) {
         const clans = await bot.Clans.find();
