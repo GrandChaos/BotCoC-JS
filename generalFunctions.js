@@ -100,6 +100,9 @@ function getAttacksRating(player) {
 
 
 function getPunishments(player) {
+
+  if (player == null) return;
+
   let countWarns = 0;
   let countNotActualWarns = 0;
   let warnsTable = '``` Дата | Кол-во | Причина\n';

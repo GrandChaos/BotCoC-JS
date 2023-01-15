@@ -50,14 +50,14 @@ module.exports = async (bot, clash, clan) => {
   
         bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
   
-        let newPlayer = new bot.Players({
+        player = new bot.Players({
           _id: member.tag,
           nickname: member.name,
           clan: clan.tag,
           th: member.townHallLevel,
           hide: clan.hide,
-        })
-        await newPlayer.save();
+        });
+        await player.save();
       }
 
       else if (player.clan == null) { //был в альянсе раньше
