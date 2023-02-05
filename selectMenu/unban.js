@@ -14,6 +14,10 @@ module.exports = async (bot, clash, interaction, args) => {
 
     for (ban of player.bans) {
         if (ban._id.toString() == args[1]){
+            if (ban.dateBegin == null) {
+                interaction.reply("Блокировка уже снята");
+                return;
+            }
             const user = bot.users.cache.find(user => user.id === args[2])
             if (ban.dateEnd != null) {
                 bot.channels.cache.get(channel).send(`${user.toString()} снял блокировку с игрока **${player.nickname}** *(${player._id})* до ${generalFunctions.formatDateFull(ban.dateEnd)} с причиной: "${ban.reason}"`);

@@ -1,59 +1,86 @@
 const { MessageEmbed } = require('discord.js')
 
 module.exports = async (bot, clash, message, args, argsF) => {
+  let clashClan;
   let clan;
   
-  if (args.clan_tag != null) {
-    try {
-      clan = await clash.getClan(args.clan_tag.toUpperCase());
-    } catch (e) {}
-    if (clan == null) {
-      if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
-      else {
-        message.reply("Клан не найден");
-        return;
+  try {
+    if (args.clan_tag != null) {
+      /*try {
+        clan = await clash.getClan(args.clan_tag.toUpperCase());
+      } catch (e) {}
+      if (clan == null) {
+        if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
+        else {
+          message.reply("Клан не найден");
+          return;
+        }
+      }*/
+
+      if (args.clan_tag[0] != '#'){
+        clan = await bot.Clans.find({ keyWord: args.clan_tag.toUpperCase() });
+        args.clan_tag = clan[0].tag;
       }
+
+      clashClan = await clash.getClan(args.clan_tag.toUpperCase());
+
     }
-  }
-  else if (args[0] != null) {
-    try {
-      clan = await clash.getClan(args[0].toUpperCase());
-    } catch (e) {}
-    if (clan == null) {
-      if (args[0].toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
-      else {
-        message.reply("Клан не найден");
-        return;
+    else if (args[0] != null) {
+      /*try {
+        clashClan = await clash.getClan(args[0].toUpperCase());
+      } catch (e) {}
+      if (clashClan == null) {
+        if (args[0].toUpperCase() === "ACADEMY") clashClan = await clash.getClan(bot.academy.tag);
+        else {
+          message.reply("Клан не найден");
+          return;
+        }
+      }*/
+
+      if (args[0][0] != '#'){
+        clan = await bot.Clans.find({ keyWord: args[0].toUpperCase() });
+        args[0] = clan[0].tag;
       }
+
+      clashClan = await clash.getClan(args[0].toUpperCase());
+
     }
+    else {
+      clan = await bot.Clans.find({ keyWord: 'STABILITY' });
+      clashClan = await clash.getClan( clan[0].tag );
+    }
+
+  } catch (e) {
+    console.warn(e);
+    message.reply("Клан не найден");
+    return;
   }
-  else clan = await clash.getClan(bot.stability.tag);
   
-  let des = `Тег: ${clan.tag}
-Очков: ${clan.points}
-Уровень: ${clan.level}\n`
-  if (clan.location != null ) des += `Расположение: ${clan.location.name}\n`
-  if (clan.chatLanguage != null ) des += `Язык: ${clan.chatLanguage.name}\n`
-des += `Вид: ${clan.type}
-Трофеев для вступления: ${clan.requiredTrophies}
-ТХ для вступления: ${clan.requiredTownHallLevel}
-Участников: ${clan.memberCount}
+  let des = `Тег: ${clashClan.tag}
+Очков: ${clashClan.points}
+Уровень: ${clashClan.level}\n`
+  if (clashClan.location != null ) des += `Расположение: ${clashClan.location.name}\n`
+  if (clashClan.chatLanguage != null ) des += `Язык: ${clashClan.chatLanguage.name}\n`
+des += `Вид: ${clashClan.type}
+Трофеев для вступления: ${clashClan.requiredTrophies}
+ТХ для вступления: ${clashClan.requiredTownHallLevel}
+Участников: ${clashClan.memberCount}
 \n\
-Участие в войнах: ${clan.warFrequency}
-Лига войн кланов: ${clan.warLeague.name}
-Побед: ${clan.warWins}
-Поражений: ${clan.warLosses}
-Ничьих: ${clan.warTies}
-Серия побед: ${clan.warWinStreak}
+Участие в войнах: ${clashClan.warFrequency}
+Лига войн кланов: ${clashClan.warLeague.name}
+Побед: ${clashClan.warWins}
+Поражений: ${clashClan.warLosses}
+Ничьих: ${clashClan.warTies}
+Серия побед: ${clashClan.warWinStreak}
 \n\
-${clan.description}`;
+${clashClan.description}`;
 
   //console.log(clan);
   
   const embed = new MessageEmbed()
     .setColor('DARK_RED')
-    .setTitle(clan.name)
-    .setThumbnail(clan.badge.url)
+    .setTitle(clashClan.name)
+    .setThumbnail(clashClan.badge.url)
     //.setAuthor({name: clan.name, iconURL: clan.badge.url})
     .setDescription(des)
     .setFooter(bot.version)

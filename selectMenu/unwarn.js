@@ -14,6 +14,10 @@ module.exports = async (bot, clash, interaction, args) => {
 
     for (warn of player.warns) {
         if (warn._id.toString() == args[1]){
+            if (warn.date == null) {
+                interaction.reply("Предупреждение уже снято");
+                return;
+            }
             const user = bot.users.cache.find(user => user.id === args[2])
             bot.channels.cache.get(channel).send(`${user.toString()} снял предупреждения с игрока **${player.nickname}** *(${player._id})* от ${generalFunctions.formatDate(warn.date)} с причиной: "${warn.reason}"`);
             

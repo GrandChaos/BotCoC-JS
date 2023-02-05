@@ -1,14 +1,13 @@
 const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
-module.exports = async (bot, clash, clan) => {
+module.exports = async (bot, clash, clan, alliance) => {
 
   await generalFunctions.asyncTimeout(Math.floor(Math.random() * 60000));
   
   let clashClan;
   let players;
-  const alliance = [bot.stability, bot.academy, bot.junior];
-
+  
   try {
     clashClan = await clash.getClan(clan.tag);
     players = await bot.Players.find({ clan: clan.tag });
@@ -55,7 +54,6 @@ module.exports = async (bot, clash, clan) => {
           nickname: member.name,
           clan: clan.tag,
           th: member.townHallLevel,
-          hide: clan.hide,
         });
         await player.save();
       }
@@ -75,7 +73,6 @@ module.exports = async (bot, clash, clan) => {
         await player.set({ clan: clan.tag });
         await player.set({ date: new Date() });
         await player.set({ th: member.townHallLevel });
-        await player.set({ hide: clan.hide });
         await player.save();
       }
 
@@ -102,7 +99,6 @@ module.exports = async (bot, clash, clan) => {
             bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
             
             await player.set({ clan: clan.tag });
-            await player.set({ hide: clan.hide });
             await player.save();
           }
         }
@@ -152,7 +148,6 @@ module.exports = async (bot, clash, clan) => {
       bot.channels.cache.get(bot.logChannel).send({ embeds: [embed] });
 
       await player.set({ clan: null });
-      await player.set({ hide: true });
       await player.set({ lastVote: 0 });
       await player.set({ date: new Date() });
       await player.save();

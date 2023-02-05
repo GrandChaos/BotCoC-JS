@@ -14,6 +14,7 @@ bot.login(process.env.TOKEN)
   .catch((err)=>{console.log(`Bot error: ${err}`)});
 bot.version = {text: '#ST Ultimate Bot, v2.13'};
 
+/*
 bot.stability = {
   tag: '#28QCVRVVL',
   warChannel: '1007633975910613022',
@@ -37,6 +38,7 @@ bot.junior = {
   url: 'https://alstability.ru/clubs/4-st-academy/',
   hide: true,
 };
+*/
 
 bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
@@ -54,19 +56,61 @@ const Player = mongoose.Schema({
   nickname: String,
   clan: String,
   th: Number,
-  hide: { type: Boolean, default: true },
+
+  /*hide: { 
+    type: Boolean, 
+    default: true, 
+  },*/
+
   attacks: [{
-    date: { type: Date, default: Date.now }, 
-    score: { type: Number, default: null }, 
-    stars: { type: Number, default: null },
-    training: { type: Boolean, default: false },
+    date: { 
+      type: Date, 
+      default: Date.now, 
+    }, 
+    score: { 
+      type: Number, 
+      default: null, 
+    }, 
+    stars: { 
+      type: Number, 
+      default: null, 
+    },
   }],
-  warns: [{ date: { type: Date, default: Date.now }, reason: String, amount: Number }],
-  warnsLimit: { type: Number, default: 2 },
-  bans: [{ dateBegin: { type: Date, default: Date.now }, dateEnd: Date,  reason: String }],
-  lastVote: { type: Date, default: 0 },
-  date: { type: Date, default: Date.now },
+
+  warns: [{ 
+    date: { 
+      type: Date, 
+      default: Date.now,
+    }, 
+    reason: String, 
+    amount: Number,
+  }],
+
+  warnsLimit: { 
+    type: Number, 
+    default: 2, 
+  },
+
+  bans: [{ 
+    dateBegin: { 
+      type: Date, 
+      default: Date.now, 
+    }, 
+    dateEnd: Date,  
+    reason: String,
+  }],
+
+  /*lastVote: { 
+    type: Date, 
+    default: 0, 
+  },*/
+
+  date: { 
+    type: Date, 
+    default: Date.now, 
+  },
 })
+
 const model = mongoose.model('Player', Player, 'Players');
 bot.Players = model;
 
@@ -76,8 +120,8 @@ const Clan = mongoose.Schema({
   warChannel: String,
   icon: String,
   url: String,
-  hide: Boolean,
-  role: String,
+  discordRole: String,
+  autoWarns: Boolean,
 })
 const model_1 = mongoose.model('Clan', Clan, 'Clans');
 bot.Clans = model_1;
@@ -85,7 +129,10 @@ bot.Clans = model_1;
 const War = mongoose.Schema({
   clan: String,
   opponent: String,
-  done: {type: Boolean, default: false},
+  done: { 
+    type: Boolean, 
+    default: false 
+  },
   date: Date,
   stars: Number,
   destruction: Number,
@@ -133,17 +180,17 @@ for (const file of commandFiles) {
   bot.commands.any.push(command);
 }
 
-
+/*
 //создание кланов в БД
-/*setTimeout((async () => {
+setTimeout((async () => {
   let Stability = new bot.Clans({
     tag: '#28QCVRVVL',
-    keyWord: '',
+    keyWord: 'STABILITY',
     warChannel: '1007633975910613022',
     icon: 'https://i.imgur.com/DL6lXEi.png',
     url: 'https://alstability.ru/clubs/1-stability/',
-    hide: false,
-    role: '1056570053186822244',
+    discordRole: '1056570053186822244',
+    autoWarns: true,
   })
   await Stability.save();
   console.log('stability');
@@ -151,12 +198,12 @@ for (const file of commandFiles) {
 
   let Academy = new bot.Clans({
     tag: '#2G8YG0PV8',
-    keyWord: 'academy',
+    keyWord: 'ACADEMY',
     warChannel: '1026084888568414238',
     icon: 'https://i.imgur.com/CpWkcT9.png',
     url: 'https://alstability.ru/clubs/4-st-academy/',
-    hide: true,
-    role: '1056572135369351218',
+    discordRole: '1056572135369351218',
+    autoWarns: true,
   })
   await Academy.save();
   console.log('academy');
@@ -164,18 +211,18 @@ for (const file of commandFiles) {
 
   let Junior = new bot.Clans({
     tag: '#2LQQR8999',
-    keyWord: 'junior',
+    keyWord: 'JUNIOR',
     warChannel: '1046475189401157652',
     icon: 'https://i.imgur.com/Os3py3e.png',
     url: 'https://alstability.ru/clubs/4-st-academy/',
-    hide: true,
-    role: '1056573821592801291',
+    discordRole: '1056573821592801291',
+    autoWarns: false,
   })
   await Junior.save();
   console.log('junior');
 
-}), 10000);*/
-
+}), 10000);
+*/
 
 //Сообщение с выбором роли для клана
 //setTimeout(() => generalFunctions.createChooseClanMessage(bot), 10000);

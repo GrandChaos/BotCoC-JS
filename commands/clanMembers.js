@@ -1,38 +1,65 @@
 const { MessageEmbed, DiscordAPIError, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = async (bot, clash, message, args, argsF) => {
-  let clanTag;
+  let clashClan;
+  let clan;
   
-  if (args.clan_tag != null) {
-    if (args.clan_tag.toUpperCase() === "ACADEMY") clanTag = bot.academy.tag;
-    else {
-      try {
-        const clan = await clash.getClan(args.clan_tag.toUpperCase());
-        clanTag = clan.tag;
-      } catch (e) {
-        //console.log(e);
-        message.reply('Клан не найден');
-        return;
+  try {
+    if (args.clan_tag != null) {
+      /*try {
+        clan = await clash.getClan(args.clan_tag.toUpperCase());
+      } catch (e) {}
+      if (clan == null) {
+        if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
+        else {
+          message.reply("Клан не найден");
+          return;
+        }
+      }*/
+
+      if (args.clan_tag[0] != '#'){
+        clan = await bot.Clans.find({ keyWord: args.clan_tag.toUpperCase() });
+        args.clan_tag = clan[0].tag;
       }
+
+      clashClan = await clash.getClan(args.clan_tag.toUpperCase());
+
     }
-  }
-  else if (args[0] != null) {
-    if (args[0].toUpperCase() === "ACADEMY") clanTag = bot.academy.tag;
-    else {
-      try {
-        const clan = await clash.getClan(args[0].toUpperCase());
-        clanTag = clan.tag;
-      } catch (e) {
-        //console.log(e);
-        message.reply('Клан не найден');
-        return;
+    else if (args[0] != null) {
+      /*try {
+        clashClan = await clash.getClan(args[0].toUpperCase());
+      } catch (e) {}
+      if (clashClan == null) {
+        if (args[0].toUpperCase() === "ACADEMY") clashClan = await clash.getClan(bot.academy.tag);
+        else {
+          message.reply("Клан не найден");
+          return;
+        }
+      }*/
+
+      if (args[0][0] != '#'){
+        clan = await bot.Clans.find({ keyWord: args[0].toUpperCase() });
+        args[0] = clan[0].tag;
       }
+
+      clashClan = await clash.getClan(args[0].toUpperCase());
+
     }
+    else {
+      clan = await bot.Clans.find({ keyWord: 'STABILITY' });
+      clashClan = await clash.getClan( clan[0].tag );
+    }
+
+  } catch (e) {
+    console.warn(e);
+    message.reply("Клан не найден");
+    return;
   }
-  else clanTag = bot.stability.tag;
+
+  const clanTag = clashClan.tag;
 
   if (args.sort == false || args[1] == false || (args.sort == null && args[1] == null)) {
-    const args = [ 'byTrophies', bot.stability.tag ];
+    const args = [ 'byTrophies', clashClan.tag ];
     require('../buttons/clanMembers')(bot, clash, message, args);
     return;
   }

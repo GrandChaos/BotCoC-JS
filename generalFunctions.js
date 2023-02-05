@@ -35,10 +35,10 @@ async function asyncTimeout (ms) {
 
 function getAttacksRating(player) {
   let attacksTable = "```Очки | Звёзды | Дата\n"
-  let trainingAttacksTable = "```Очки | Звёзды | Дата\n"
+  //let trainingAttacksTable = "```Очки | Звёзды | Дата\n"
   let rating = 0;
   let countAttacks = 0;
-  let countTrainingAttacks = 0;
+  //let countTrainingAttacks = 0;
   let countSkippedAttacks = 0;
   let totalStars = 0;
   let stars = 0;
@@ -46,8 +46,8 @@ function getAttacksRating(player) {
 
   for (const attack of player.attacks) {
     totalStars += attack.stars;
-    if (!attack.training) {
-      if (Date.now() - attack.date > 86400000 * 60) continue;
+    //if (!attack.training) {
+      if (Date.now() - attack.date > 86400000 * 30) continue;
       rating += attack.score;
       stars += attack.stars;
       countAttacks++;
@@ -62,7 +62,7 @@ function getAttacksRating(player) {
       else attacksTable += '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 | '
 
       attacksTable += formatDate(attack.date) + "\n";
-    }
+    /*}
     else {
       if (Date.now() - attack.date > 86400000 * 14) continue;
       stars += attack.stars;
@@ -77,12 +77,12 @@ function getAttacksRating(player) {
       else trainingAttacksTable += '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 | '
 
       trainingAttacksTable += formatDate(attack.date) + "\n";
-    }
+    }*/
   }
   attacksTable += "```";
-  trainingAttacksTable += "```";
+  //trainingAttacksTable += "```";
 
-  starsRatio = (stars / (countAttacks + countTrainingAttacks)).toFixed(2);
+  starsRatio = (stars / (countAttacks /*+ countTrainingAttacks*/)).toFixed(2);
 
   rating = Math.trunc(rating / countAttacks);
 
@@ -91,10 +91,10 @@ function getAttacksRating(player) {
     starsRatio: starsRatio,
     totalStars: totalStars,
     countAttacks: countAttacks,
-    countTrainingAttacks: countTrainingAttacks,
+    //countTrainingAttacks: countTrainingAttacks,
     countSkippedAttacks: countSkippedAttacks,
     attacksTable: attacksTable,
-    trainingAttacksTable: trainingAttacksTable
+    //trainingAttacksTable: trainingAttacksTable
   }
 }
 

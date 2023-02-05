@@ -54,11 +54,11 @@ ${date}
 Трофеев: ${member.trophies}
 Уровень: ${member.expLevel}
 Роль: ${member.role}
-Рейтинговых атак: ${attacksRating.countAttacks}`)
+Атак: ${attacksRating.countAttacks}`)
       .setFooter(bot.version)
       .setTimestamp()
 
-    if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks == 0) {
+    if (attacksRating.countAttacks > 0/* && attacksRating.countTrainingAttacks == 0*/) {
       embed
         .setDescription(`
 Тег: ${player.id}
@@ -73,7 +73,7 @@ ${date}
 Средний рейтинг: ${attacksRating.rating}\n
 Данные по атакам:\n${attacksRating.attacksTable}`)
     }
-    else if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks > 0) {
+    /*else if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks > 0) {
       embed
         .setDescription(`
 Тег: ${player.id}
@@ -102,7 +102,7 @@ ${date}
 Звёзд в альянсе: ${attacksRating.totalStars}
 Звёзд за атаку: ${attacksRating.starsRatio}\n
 Атаки в академе:\n${attacksRating.trainingAttacksTable}`)
-    }
+    }*/
     
     if (player.clan) {
       const clan = await clash.getClan(player.clan);
