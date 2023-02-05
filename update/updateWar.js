@@ -110,9 +110,18 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       .setColor(color)
       .setDescription('=======================================================')
   
-  
-    const members = await war.clan.members;
+
+    let minThNotDistr = 99999;
+    for (const opponentMember of war.opponent.members) {
+      if (minThNotDistr > opponentMember.townHallLevel) {
+        minThNotDistr = opponentMember.townHallLevel;
+      }
+    }
+
+
+    const members = war.clan.members;
     members.sort((a, b) => a.mapPosition - b.mapPosition);
+
     let countMembers = 0;
   
     for (const member of members) {
@@ -138,7 +147,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
             await player.save();
           }
           else {*/
-            await player.attacks.push({ score: score, stars: attack.stars, date: war.endTime, /*training: true */});
+            await player.attacks.push({ score: score, stars: attack.stars, date: war.endTime/*, training: true */});
             await player.save();
           //}
   
@@ -156,17 +165,44 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
           await player.set({ lastVote: 0 });
           await player.save();
         }
-        else {*/
-          await player.attacks.push({ score: 0, stars: 0, date: war.endTime, /*training: true */});
+        else {
+          await player.attacks.push({ score: 0, stars: 0, date: war.endTime, training: true});
           await player.save();
-        //}
+        }*/
+
+        if (member.townHallLevel >= minThNotDistr || attacks == null) {
+          await player.attacks.push({ score: 0, stars: 0, date: war.endTime});
+          await player.save();
+        }
+        else { //на случай если некого бить - атака не пропущена, но очки минимальные
+          await player.attacks.push({ score: 1, stars: 0, date: war.endTime});
+          await player.save();
+        }
   
         fieldValue += "0 (0 зв.)" + '\n';
       }
+
+
+
+
+      const attacksRating = generalFunctions.getAttacksRating(player);
+      let warnReason = null;
+
+      if (attacks == null) warnReason = 'Пропуск атак';
+      else if (attacksRating.countSkippedAttacks / attacksRating.countAttacks > 0.30 && attacksRating.countAttacks >= 3) warnReason = '30%+ пропусков атак';
+
+      const playerClan = await bot.Clans.find({ tag: war.clan.tag });
+      playerClan = playerClan[0];
   
+      if (playerClan.autoWarns && warnReason != null) {
+        require('./giveWarn')(bot, player, 1, warnReason, '#ST Ultimate' );
+      }
+
+
+
       countMembers++;
-      if (countMembers <= 25) embedMembers_1.addFields({ name: `${member.mapPosition}. ${member.name}`, value: fieldValue, inline: true });
-      else embedMembers_2.addFields({ name: `${member.mapPosition}. ${member.name}`, value: fieldValue, inline: true });
+      if (countMembers <= 25) embedMembers_1.addFields({ name: `${countMembers}. ${member.name}`, value: fieldValue, inline: true });
+      else embedMembers_2.addFields({ name: `${countMembers}. ${member.name}`, value: fieldValue, inline: true });
   
     }
     if (countMembers <= 25) {
