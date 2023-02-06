@@ -191,7 +191,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       if (attacks == null) warnReason = 'Пропуск атак';
       else if (attacksRating.countSkippedAttacks / attacksRating.countAttacks > 0.30 && attacksRating.countAttacks >= 3) warnReason = '30%+ пропусков атак';
 
-      const playerClan = await bot.Clans.find({ tag: war.clan.tag });
+      let playerClan = await bot.Clans.find({ tag: war.clan.tag });
       playerClan = playerClan[0];
   
       if (playerClan.autoWarns && warnReason != null) {
