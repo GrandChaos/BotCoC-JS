@@ -188,7 +188,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       const attacksRating = generalFunctions.getAttacksRating(player);
       let warnReason = null;
 
-      if (attacks == null) warnReason = 'Пропуск атак';
+      if (attacks == null || attacks.length == 0) warnReason = 'Пропуск атак';
       else if (attacksRating.countSkippedAttacks / attacksRating.countAttacks > 0.30 && attacksRating.countAttacks >= 3) warnReason = '30%+ пропусков атак';
 
       let playerClan = await bot.Clans.find({ tag: war.clan.tag });
