@@ -2,9 +2,21 @@ const { MessageEmbed, DiscordAPIError } = require('discord.js');
 const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, interaction, args) => {
-
+    let players;
     //players = await bot.Players.find({ hide: false });
-    players = await bot.Players.find({ clan : {$ne : null} });
+    if (args[1] == 'ALL') {
+        players = await bot.Players.find({ clan : {$ne : null}, th : {$gte : 10} });
+    }
+    else {
+        let clan = await bot.Clans.find({ keyWord: args[1].toUpperCase() });
+        if (clan != null) {
+            players = await bot.Players.find({ clan : clan[0].tag });
+        }
+        else {
+            interaction.reply('Клан не найден. Используйте ключевые слова "STABILITY", "ACADEMY" и т.д.');
+            return;
+        }
+    }
 
     for (const player of players) {
       player.rating = generalFunctions.getAttacksRating(player).rating;
@@ -39,7 +51,7 @@ module.exports = async (bot, clash, interaction, args) => {
   
     for (const player of players) {
       if (isNaN(player.rating)) continue;
-      if (player.th < 10) continue;
+      //if (player.th < 10) continue;
       //if (player.hide) continue;
   
       if (i >= 10) description += i++ + " | "
@@ -50,10 +62,10 @@ module.exports = async (bot, clash, interaction, args) => {
       else if (player.rating >= 10) description += "\u00A0" + player.rating + "\u00A0\ | ";
       else description += "\u00A0\u00A0" + player.rating + "\u00A0 | ";
   
-      description += "\u00A0" + player.starsRatio + "\u00A0 | "
+      description += "\u00A0" + player.starsRatio + "\u00A0 | ";
   
       if (player.th >= 10) description += player.th + " | ";
-      else description += player.th + "\u00A0 + | ";
+      else description += player.th + "\u00A0 | ";
   
       description += player.nickname + "\n";
     }
