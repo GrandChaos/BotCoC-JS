@@ -2,6 +2,8 @@ const { exec } = require("child_process");
 
 
 module.exports = async (bot, clash) => {
+  bot.channels.cache.get('1074404720208252938').send(`/ping`);
+
   let discordApi = false;
   let mongodb = false;
   let clashApi = false
@@ -17,8 +19,8 @@ module.exports = async (bot, clash) => {
 
   if (!clash.inMaintenance) clashApi = true;
 
-  if (!discordApi || !mongodb || !clashApi || (bot.lastPing - Date.now > 3.5 * 60 * 1000)) {
-    console.log(`Stop time: ${Date()}`);
+  if (!discordApi || !mongodb || !clashApi || (new Date() - bot.lastPing > 3.5 * 60 * 1000)) {
+    console.log(`Stop time: ${new Date()}`);
     exec("kill 1", (error, stdout, stderr) => {
       if (error) {
         console.log(`error: ${error.message}`);
@@ -32,5 +34,5 @@ module.exports = async (bot, clash) => {
     });
   }
 
-  bot.channels.cache.get('1074404720208252938').send(`/ping`);
+  console.log(new Date() - bot.lastPing);
 }
