@@ -14,7 +14,7 @@ bot.login(process.env.TOKEN)
   .catch((err)=>{console.log(`Bot error: ${err}`)});
 bot.version = {text: '#ST Ultimate Bot, v2.16'};
 bot.lastPing = Date.now;
-setTimeout(() => bot.channels.cache.get('1074404720208252938').send(`**Bot is running!**\n${(new Date())}`), 5000);
+setTimeout(() => bot.channels.cache.get('1074404720208252938').send(`**Bot is running!**\n${(new Date())}`), 10000);
 
 /*
 bot.stability = {
@@ -167,7 +167,7 @@ require('./update')(bot, clash);
 
 
 //чек внешних интеграций
-setTimeout(() => require('./update/checkApi')(bot, clash), 10000);
+setTimeout(() => require('./update/checkApi')(bot, clash), 11000);
 
 
 //Подгрузка комманд discord
