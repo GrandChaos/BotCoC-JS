@@ -9,23 +9,20 @@ module.exports = async (bot, clash) => {
     true
   );
 
-  const clans = await bot.Clans.find();
+  const updateClans = new CronJob(
+    '*/5 * * * *',
+    () => checkClans(bot, clash),
+    null,
+    true
+  );
 
-  for (const clan of clans) {
+  async function checkClans(bot, clash) {
+    const clans = await bot.Clans.find();
 
-    const updateMembers = new CronJob(
-      '*/5 * * * *',
-      () => require('./updateMembers')(bot, clash, clan, clans),
-      null,
-      true
-    );
-
-    const updateWar = new CronJob(
-      '*/10 * * * *',
-      () => require('./updateWar')(bot, clash, clan),
-      null,
-      true
-    );
+    for (const clan of clans) {
+      require('./updateMembers')(bot, clash, clan, clans);
+      require('./updateWar')(bot, clash, clan);
+    }
   }
 
   /*

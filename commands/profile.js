@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, message, args, argsF) => {
@@ -29,11 +29,42 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     const member = await clash.getPlayer(player._id);
 
-    let date;
-    if (player.clan) date = `Состоит в клане с ${generalFunctions.formatDateFull(player.date)}`;
-    else date = `Покинул клан ${generalFunctions.formatDateFull(player.date)}`;
+    let dateDes;
+    if (player.clan) dateDes = `Состоит в клане с ${generalFunctions.formatDateFull(player.date)}`;
+    else dateDes = `Покинул клан ${generalFunctions.formatDateFull(player.date)}`;
+
+    const punishments = generalFunctions.getPunishments(player);
+    let punishmentsDes;
+    if (punishments.countBans > 0) {
+      punishmentsDes = `
+**ЗАБЛОКИРОВАН**
+Предупреждений: ${punishments.countWarns}/${player.warnsLimit}     `;
+    }
+    else if (punishments.countBans == 0) {
+      punishmentsDes = `
+Предупреждений: ${punishments.countWarns}/${player.warnsLimit} `;
+    }
 
     const attacksRating = generalFunctions.getAttacksRating(player);
+    let attacksDes;
+    if (attacksRating.countAttacks == 0 && attacksRating.totalAttacks == 0) {
+      attacksDes = `
+Атак в альянсе: ${attacksRating.totalAttacks}`;
+    }
+    else if (attacksRating.countAttacks == 0 && attacksRating.totalAttacks > 0) {
+      attacksDes = `
+Атак в альянсе: ${attacksRating.totalAttacks}
+Звёзд в альянсе: ${attacksRating.totalStars}`;
+    }
+    else if (attacksRating.countAttacks > 0) {
+      attacksDes = `
+Атак в альянсе: ${attacksRating.totalAttacks}
+Звёзд в альянсе: ${attacksRating.totalStars}
+Звёзд за атаку: ${attacksRating.starsRatio}
+Средний рейтинг: ${attacksRating.rating}
+
+Данные по атакам:\n${attacksRating.attacksTable}`;
+    }
 
     let color = 'GREY';
     if (attacksRating.rating >= 1000) color = 'PURPLE';
@@ -49,67 +80,35 @@ module.exports = async (bot, clash, message, args, argsF) => {
       .setThumbnail(member.league.icon.url)
       .setDescription(`
 Тег: ${player.id}
-${date}
+${dateDes}
 Уровень ТХ: ${member.townHallLevel}
 Трофеев: ${member.trophies}
 Уровень: ${member.expLevel}
 Роль: ${member.role}
-Атак: ${attacksRating.countAttacks}`)
+${punishmentsDes}
+${attacksDes}`)
       .setFooter(bot.version)
       .setTimestamp()
-
-    if (attacksRating.countAttacks > 0/* && attacksRating.countTrainingAttacks == 0*/) {
-      embed
-        .setDescription(`
-Тег: ${player.id}
-${date}
-Уровень ТХ: ${member.townHallLevel}
-Трофеев: ${member.trophies}
-Уровень: ${member.expLevel}
-Роль: ${member.role}
-Рейтинговых атак: ${attacksRating.countAttacks}
-Звёзд в альянсе: ${attacksRating.totalStars}
-Звёзд за атаку: ${attacksRating.starsRatio}
-Средний рейтинг: ${attacksRating.rating}\n
-Данные по атакам:\n${attacksRating.attacksTable}`)
-    }
-    /*else if (attacksRating.countAttacks > 0 && attacksRating.countTrainingAttacks > 0) {
-      embed
-        .setDescription(`
-Тег: ${player.id}
-${date}
-Уровень ТХ: ${member.townHallLevel}
-Трофеев: ${member.trophies}
-Уровень: ${member.expLevel}
-Роль: ${member.role}
-Рейтинговых атак: ${attacksRating.countAttacks}
-Звёзд в альянсе: ${attacksRating.totalStars}
-Звёзд за атаку: ${attacksRating.starsRatio}
-Средний рейтинг: ${attacksRating.rating}\n
-Данные по атакам:\n${attacksRating.attacksTable}\n
-Атаки в академе:\n${attacksRating.trainingAttacksTable}`)
-    }
-    else if (attacksRating.countAttacks == 0 && attacksRating.countTrainingAttacks > 0) {
-      embed
-        .setDescription(`
-Тег: ${player.id}
-${date}
-Уровень ТХ: ${member.townHallLevel}
-Трофеев: ${member.trophies}
-Уровень: ${member.expLevel}
-Роль: ${member.role}
-Рейтинговых атак: ${attacksRating.countAttacks}
-Звёзд в альянсе: ${attacksRating.totalStars}
-Звёзд за атаку: ${attacksRating.starsRatio}\n
-Атаки в академе:\n${attacksRating.trainingAttacksTable}`)
-    }*/
     
     if (player.clan) {
       const clan = await clash.getClan(player.clan);
       embed.setTitle(`${player.nickname} - ${clan.name}`);
     }
 
-    message.reply({ embeds: [embed] });
+    const row = new MessageActionRow()
+    .addComponents([ 
+      new MessageButton()
+        .setCustomId(`getPunishments_${player._id}`)
+        .setLabel('Наказания')
+        .setStyle(1),
+    ]);
+
+    if (punishments.countBans > 0 || punishments.countWarns > 0){
+      message.reply({ embeds: [embed], components: [row] });
+    }
+    else {
+      message.reply({ embeds: [embed] });
+    }
   }
 
   else {

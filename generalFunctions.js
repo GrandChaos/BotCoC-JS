@@ -38,6 +38,7 @@ function getAttacksRating(player) {
   //let trainingAttacksTable = "```Очки | Звёзды | Дата\n"
   let rating = 0;
   let countAttacks = 0;
+  let totalAttacks = 0;
   //let countTrainingAttacks = 0;
   let countSkippedAttacks = 0;
   let totalStars = 0;
@@ -46,6 +47,7 @@ function getAttacksRating(player) {
 
   for (const attack of player.attacks) {
     totalStars += attack.stars;
+    totalAttacks++;
     //if (!attack.training) {
       if (Date.now() - attack.date > 86400000 * 30) continue;
       rating += attack.score;
@@ -91,6 +93,7 @@ function getAttacksRating(player) {
     starsRatio: starsRatio,
     totalStars: totalStars,
     countAttacks: countAttacks,
+    totalAttacks: totalAttacks,
     //countTrainingAttacks: countTrainingAttacks,
     countSkippedAttacks: countSkippedAttacks,
     attacksTable: attacksTable,

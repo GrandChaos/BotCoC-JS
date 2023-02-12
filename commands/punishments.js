@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, message, args, argsF) => {
@@ -57,7 +57,15 @@ module.exports = async (bot, clash, message, args, argsF) => {
       .setFooter(bot.version)
       .setTimestamp()
 
-    message.reply({ embeds: [embed] });
+      const row = new MessageActionRow()
+      .addComponents([ 
+        new MessageButton()
+          .setCustomId(`getProfile_${player._id}`)
+          .setLabel('Профиль')
+          .setStyle(1),
+      ]);
+
+    message.reply({ embeds: [embed], components: [row] });
 };
 
 
