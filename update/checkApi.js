@@ -17,7 +17,7 @@ module.exports = async (bot, clash) => {
 
   if (!clash.inMaintenance) clashApi = true;
 
-  if (!discordApi || !mongodb || !clashApi) {
+  if (!discordApi || !mongodb || !clashApi || (bot.lastPing - Date.now > 3.5 * 60 * 1000)) {
     console.log(`Stop time: ${Date()}`);
     exec("kill 1", (error, stdout, stderr) => {
       if (error) {
@@ -31,4 +31,6 @@ module.exports = async (bot, clash) => {
       console.log(`stdout: ${stdout}`);
     });
   }
+
+  bot.channels.cache.get('1074404720208252938').send(`/ping`);
 }
