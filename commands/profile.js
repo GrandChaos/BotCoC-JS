@@ -30,19 +30,38 @@ module.exports = async (bot, clash, message, args, argsF) => {
     const member = await clash.getPlayer(player._id);
 
     let dateDes;
-    if (player.clan) dateDes = `Состоит в клане с ${generalFunctions.formatDateFull(player.date)}`;
+    if (player.clan != null) dateDes = `Состоит в клане с ${generalFunctions.formatDateFull(player.date)}`;
     else dateDes = `Покинул клан ${generalFunctions.formatDateFull(player.date)}`;
+
+    let des;
+    if (player.clan != null) {
+      des = `
+Тег: ${player.id}
+${dateDes}
+Уровень ТХ: ${member.townHallLevel}
+Трофеев: ${member.trophies}
+Уровень: ${member.expLevel}
+Роль: ${member.role}`;
+    }
+    else {
+      des = `
+Тег: ${player.id}
+${dateDes}
+Уровень ТХ: ${member.townHallLevel}
+Трофеев: ${member.trophies}
+Уровень: ${member.expLevel}`;
+    }
 
     const punishments = generalFunctions.getPunishments(player);
     let punishmentsDes;
     if (punishments.countBans > 0) {
       punishmentsDes = `
 **ЗАБЛОКИРОВАН**
-Предупреждений: ${punishments.countWarns}/${player.warnsLimit}     `;
+Предупреждений: ${punishments.countWarns}/${player.warnsLimit}`;
     }
     else if (punishments.countBans == 0) {
       punishmentsDes = `
-Предупреждений: ${punishments.countWarns}/${player.warnsLimit} `;
+Предупреждений: ${punishments.countWarns}/${player.warnsLimit}`;
     }
 
     const attacksRating = generalFunctions.getAttacksRating(player);
@@ -79,12 +98,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
       .setTitle(`${player.nickname}`)
       .setThumbnail(member.league.icon.url)
       .setDescription(`
-Тег: ${player.id}
-${dateDes}
-Уровень ТХ: ${member.townHallLevel}
-Трофеев: ${member.trophies}
-Уровень: ${member.expLevel}
-Роль: ${member.role}
+${des}
 ${punishmentsDes}
 ${attacksDes}`)
       .setFooter(bot.version)
@@ -100,7 +114,7 @@ ${attacksDes}`)
       new MessageButton()
         .setCustomId(`getPunishments_${player._id}`)
         .setLabel('Наказания')
-        .setStyle(1),
+        .setStyle(2),
     ]);
 
     if (punishments.countBans > 0 || punishments.countWarns > 0){

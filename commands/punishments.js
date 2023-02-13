@@ -34,17 +34,17 @@ module.exports = async (bot, clash, message, args, argsF) => {
     const punish = generalFunctions.getPunishments(player);
     
     if (punish.countBans > 0) {
-      des += `Активные блокировки:\n${punish.bansTable}\n\n`;
+      des += `Активные блокировки:\n${punish.bansTable}\n`;
     }
     if (punish.countNotActualBans > 0) {
-      des += `История блокировок:\n${punish.notActualBansTable}\n\n`;
+      des += `История блокировок:\n${punish.notActualBansTable}\n`;
     }
     if (punish.countWarns > 0) {
       des += `Предупреждения:\n${punish.warnsTable}\nВсего предупреждений: ${punish.countWarns}\n`;
     }
     des += `Лимит предупреждений: ${player.warnsLimit}\n\n`;
     if (punish.countNotActualWarns > 0) {
-      des += `История предупреждений: ${punish.notActualWarnsTable}\n\n`;
+      des += `История предупреждений:\n${punish.notActualWarnsTable}\n`;
     }
     if (punish.countBans + punish.countNotActualBans + punish.countWarns + punish.countNotActualWarns == 0) {
       des += 'Наказаний нет';
@@ -62,7 +62,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
         new MessageButton()
           .setCustomId(`getProfile_${player._id}`)
           .setLabel('Профиль')
-          .setStyle(1),
+          .setStyle(2),
       ]);
 
     message.reply({ embeds: [embed], components: [row] });
