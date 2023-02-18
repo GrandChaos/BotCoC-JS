@@ -5,7 +5,6 @@ module.exports = async (bot, clash, message, args, argsF) => {
     .setColor('DARK_RED')
     .setTitle('Рейтинг эффективности на КВ и ЛВК')
     .setThumbnail('https://cdn-icons-png.flaticon.com/512/6695/6695008.png')
-    //.setAuthor({name: 'Рейтинг эффективности на КВ и ЛВК', iconURL: 'https://cdn-icons-png.flaticon.com/512/6695/6695008.png'})
     .setDescription('Данный бот создан для составления рейтинга \
 атак игроков на клановых войнах. Не пропускайте атаки и побеждайте \
 сильных противников, чтобы повысить свой рейтинг. \
@@ -25,7 +24,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
 \n\
 /warlog #ТЕГ(необяз.) - лог клановых войн клана. Если тег не указан - клан #STABILITY, ключевое слово `academy` вместо #ТЕГа - клан #ST Academy\n\
 \n\
-/warns НИКНЕЙМ(или #ТЕГ) - информация о наказаниях игрока (только игроки альянса)\n')
+/punish НИКНЕЙМ(или #ТЕГ) - информация о наказаниях игрока (только игроки альянса)\n')
     .setFooter(bot.version)
     .setTimestamp()
   

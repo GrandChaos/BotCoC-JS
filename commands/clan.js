@@ -6,17 +6,6 @@ module.exports = async (bot, clash, message, args, argsF) => {
   
   try {
     if (args.clan_tag != null) {
-      /*try {
-        clan = await clash.getClan(args.clan_tag.toUpperCase());
-      } catch (e) {}
-      if (clan == null) {
-        if (args.clan_tag.toUpperCase() === "ACADEMY") clan = await clash.getClan(bot.academy.tag);
-        else {
-          message.reply("Клан не найден");
-          return;
-        }
-      }*/
-
       if (args.clan_tag[0] != '#'){
         clan = await bot.Clans.find({ keyWord: args.clan_tag.toUpperCase() });
         args.clan_tag = clan[0].tag;
@@ -26,17 +15,6 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     }
     else if (args[0] != null) {
-      /*try {
-        clashClan = await clash.getClan(args[0].toUpperCase());
-      } catch (e) {}
-      if (clashClan == null) {
-        if (args[0].toUpperCase() === "ACADEMY") clashClan = await clash.getClan(bot.academy.tag);
-        else {
-          message.reply("Клан не найден");
-          return;
-        }
-      }*/
-
       if (args[0][0] != '#'){
         clan = await bot.Clans.find({ keyWord: args[0].toUpperCase() });
         args[0] = clan[0].tag;
@@ -81,7 +59,6 @@ ${clashClan.description}`;
     .setColor('DARK_RED')
     .setTitle(clashClan.name)
     .setThumbnail(clashClan.badge.url)
-    //.setAuthor({name: clan.name, iconURL: clan.badge.url})
     .setDescription(des)
     .setFooter(bot.version)
     .setTimestamp()

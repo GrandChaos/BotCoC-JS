@@ -42,7 +42,6 @@ module.exports = async (bot, clash, interaction, args) => {
     }
     des += "```"
 
-    //console.log(clan);
 
     const embed = new MessageEmbed()
         .setColor('DARK_RED')

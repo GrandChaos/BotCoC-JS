@@ -16,32 +16,6 @@ bot.version = {text: '#ST Ultimate Bot, v2.16'};
 bot.lastPing = new Date();
 setTimeout(() => bot.channels.cache.get('1074404720208252938').send(`**Bot is running!**\n${(new Date())}`), 10000);
 
-/*
-bot.stability = {
-  tag: '#28QCVRVVL',
-  warChannel: '1007633975910613022',
-  icon: 'https://i.imgur.com/DL6lXEi.png',
-  url: 'https://alstability.ru/clubs/1-stability/',
-  hide: false,
-};
-
-bot.academy = {
-  tag: '#2G8YG0PV8',
-  warChannel: '1026084888568414238',
-  icon: 'https://i.imgur.com/CpWkcT9.png',
-  url: 'https://alstability.ru/clubs/4-st-academy/',
-  hide: true,
-};
-
-bot.junior = {
-  tag: '#2LQQR8999',
-  warChannel: '1046475189401157652',
-  icon: 'https://i.imgur.com/Os3py3e.png',
-  url: 'https://alstability.ru/clubs/4-st-academy/',
-  hide: true,
-};
-*/
-
 bot.logChannel = '1005059293592174743';
 bot.voteChannel = '1014928743153795104';
 
@@ -58,11 +32,6 @@ const Player = mongoose.Schema({
   nickname: String,
   clan: String,
   th: Number,
-
-  /*hide: { 
-    type: Boolean, 
-    default: true, 
-  },*/
 
   attacks: [{
     date: { 
@@ -101,11 +70,6 @@ const Player = mongoose.Schema({
     dateEnd: Date,  
     reason: String,
   }],
-
-  /*lastVote: { 
-    type: Date, 
-    default: 0, 
-  },*/
 
   date: { 
     type: Date, 

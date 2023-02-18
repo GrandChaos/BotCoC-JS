@@ -3,7 +3,6 @@ const generalFunctions = require('../generalFunctions.js')
 
 module.exports = async (bot, clash, interaction, args) => {
     let players;
-    //players = await bot.Players.find({ hide: false });
     if (args[1] == 'ALL') {
         players = await bot.Players.find({ clan : {$ne : null}, th : {$gte : 10} });
     }
@@ -51,8 +50,6 @@ module.exports = async (bot, clash, interaction, args) => {
   
     for (const player of players) {
       if (isNaN(player.rating)) continue;
-      //if (player.th < 10) continue;
-      //if (player.hide) continue;
   
       if (i >= 10) description += i++ + " | "
       else description += "\u00A0" + i++ + " | "

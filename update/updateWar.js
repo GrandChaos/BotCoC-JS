@@ -8,19 +8,17 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
 
   await generalFunctions.asyncTimeout(Math.floor(Math.random() * 60000));
 
-  await updateWar(bot, clash, clanTag, channel, /*toRecord*/);
+  await updateWar(bot, clash, clanTag, channel);
 
-  async function updateWar(bot, clash, clanTag, channel, /*toRecord*/) {
+  async function updateWar(bot, clash, clanTag, channel) {
     let curWar;
     let lastWar;
     try {
       curWar = await clash.getCurrentWar(clanTag) //текущая война
       lastWar = await bot.Wars.find({ clan: clanTag }).limit(1).sort({ $natural: -1 }) //последний противник
       lastWar = lastWar[0];
-      //console.log(curWar);
     }
     catch (err) {
-      //console.log(err);
       return;
     }
 
@@ -41,18 +39,16 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
     }
 
     if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
-      await summarizeWar(bot, curWar, channel, /*toRecord*/);
+      await summarizeWar(bot, curWar, channel);
       await saveWarToDB(curWar, lastWar);
-      //if (toRecord) require('./roleManagement')(bot, clash, curWar.clan.members, 'after war');
       return;
     }
 
     if (curWar.state == 'inWar' && curWar.isCWL && curWar.opponent.tag != lastWar.opponent) { //если начался следующий раунд ЛВК
       if (!lastWar.done) {
         const prevRound = await clash.getCurrentWar({ clanTag: clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
-        await summarizeWar(bot, prevRound, channel, /*toRecord*/); //обрабатыевем
+        await summarizeWar(bot, prevRound, channel); //обрабатыевем
         await saveWarToDB(prevRound, lastWar);
-        //if (toRecord) require('./roleManagement')(bot, clash, curWar.clan.members, 'after war');
       }
       const newWar = new bot.Wars({ //записываем новый раунд
         clan: clanTag,
@@ -64,7 +60,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
     }
   }
 
-  async function summarizeWar(bot, war, channel, /*toRecord*/) { // подведение итогов
+  async function summarizeWar(bot, war, channel) { // подведение итогов
     if (war.state != 'warEnded') return; //не закончена - вышли
 
     let des;
@@ -110,10 +106,11 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       .setColor(color)
       .setDescription('=======================================================')
 
-
+      
+    //вычисление слабейшего недобитого противника
     let minThNotDistr = 99999;
     for (const opponentMember of war.opponent.members) {
-      if (minThNotDistr > opponentMember.townHallLevel) {
+      if (minThNotDistr > opponentMember.townHallLevel && (opponentMember.bestOpponentAttack == null || opponentMember.bestOpponentAttack.stars < 3)) {
         minThNotDistr = opponentMember.townHallLevel;
       }
     }
@@ -138,18 +135,12 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       const attacks = member.attacks;
 
       if (attacks != null) {
-        for (const attack of attacks) { //атаки
+        for (const attack of attacks) { //проведенные атаки
 
           const score = calculateAttackScore(attack);
 
-          /*if (toRecord) {
-            await player.attacks.push({ score: score, stars: attack.stars, date: war.endTime, training: false });
-            await player.save();
-          }
-          else {*/
-          await player.attacks.push({ score: score, stars: attack.stars, date: war.endTime/*, training: true */ });
+          await player.attacks.push({ score: score, stars: attack.stars, date: war.endTime });
           await player.save();
-          //}
 
           fieldValue += `${score} (${attack.stars} зв.)` + '\n';
         }
@@ -159,18 +150,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       if (attacks != null) countAttacks = attacks.length;
 
       for (var i = countAttacks; i < war.attacksPerMember; i++) { //пропущенные атаки
-
-        /*if (toRecord) {
-          await player.attacks.push({ score: 0, stars: 0, date: war.endTime, training: false });
-          await player.set({ lastVote: 0 });
-          await player.save();
-        }
-        else {
-          await player.attacks.push({ score: 0, stars: 0, date: war.endTime, training: true});
-          await player.save();
-        }*/
-
-        if (member.townHallLevel >= minThNotDistr || attacks == null) {
+        if (member.townHallLevel >= minThNotDistr || attacks == null || attacks.length == 0) {
           await player.attacks.push({ score: 0, stars: 0, date: war.endTime });
           await player.save();
         }
@@ -184,8 +164,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
 
 
 
-
-      const attacksRating = generalFunctions.getAttacksRating(player);
+      //const attacksRating = generalFunctions.getAttacksRating(player);
       let warnReason = null;
 
       if (attacks == null || attacks.length == 0) warnReason = 'Пропуск атак';

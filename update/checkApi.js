@@ -1,8 +1,11 @@
 const { exec } = require("child_process");
+const generalFunctions = require('../generalFunctions.js');
 
 
 module.exports = async (bot, clash) => {
   bot.channels.cache.get('1074404720208252938').send(`/ping`);
+
+  await generalFunctions.asyncTimeout(3000);
 
   let discordApi = false;
   let mongodb = false;
@@ -19,7 +22,7 @@ module.exports = async (bot, clash) => {
 
   if (!clash.inMaintenance) clashApi = true;
 
-  if (!discordApi || !mongodb || !clashApi || (new Date() - bot.lastPing > 3.5 * 60 * 1000)) {
+  if (!discordApi || !mongodb || !clashApi || (new Date() - bot.lastPing > 4000)) {
     console.log(`Stop time: ${new Date()}`);
     exec("kill 1", (error, stdout, stderr) => {
       if (error) {

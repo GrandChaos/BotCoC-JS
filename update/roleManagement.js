@@ -1,3 +1,8 @@
+
+
+// НА ДАННЫЙ МОМЕНТ МОДУЛЬ НЕ ИСПОЛЬЗУЕТСЯ
+
+
 const { MessageEmbed } = require('discord.js')
 const generalFunctions = require('../generalFunctions.js')
 
