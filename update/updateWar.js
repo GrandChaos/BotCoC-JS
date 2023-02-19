@@ -106,10 +106,11 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       .setColor(color)
       .setDescription('=======================================================')
 
-      
+
     //вычисление слабейшего недобитого противника
     let minThNotDistr = 99999;
-    for (const opponentMember of war.opponent.members) {
+    const opponentMembers = war.opponent.members;
+    for (const opponentMember of opponentMembers) {
       if (minThNotDistr > opponentMember.townHallLevel && (opponentMember.bestOpponentAttack == null || opponentMember.bestOpponentAttack.stars < 3)) {
         minThNotDistr = opponentMember.townHallLevel;
       }
@@ -160,6 +161,8 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
         }
 
         fieldValue += "0 (0 зв.)" + '\n';
+
+        await bot.channels.cache.get('1074404720208252938').send(`Игрок ${member.townHallLevel}\nПротивник ${minThNotDistr}`);
       }
 
 

@@ -1,5 +1,6 @@
 module.exports = async (bot, clash, message, args, argsF) => {
-  console.log(`API Latency is ${Math.round(bot.ws.ping)}ms\n${Date()}\n`);
+  //console.log(`\nAPI Latency is ${Math.round(bot.ws.ping)}ms\n${Date()}\n`);
+  console.log(`${(new Date).toISOString()} - Get ping!`);
   message.reply(`I'm here!\n\Latency is ${Date.now() - message.createdTimestamp}ms.\n\API Latency is ${Math.round(bot.ws.ping)}ms`);
   bot.lastPing = new Date();
 };
