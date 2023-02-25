@@ -162,7 +162,11 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
 
         fieldValue += "0 (0 зв.)" + '\n';
 
-        await bot.channels.cache.get('1074404720208252938').send(`Игрок ${member.townHallLevel}\nПротивник ${minThNotDistr}`);
+        await bot.channels.cache.get('1074404720208252938').send(`Игрок ${member.townHallLevel}
+        Противник ${minThNotDistr}
+        По тх: ${member.townHallLevel >= minThNotDistr}
+        Пустые атаки: ${attacks == null}
+        Нулевая длинна: ${attacks.length == 0}`);
       }
 
 
