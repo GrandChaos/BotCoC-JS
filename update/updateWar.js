@@ -39,7 +39,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
     }
 
     if (curWar.state == 'warEnded' && !lastWar.done) { //война окончена, но не обработана    
-      await summarizeWar(bot, curWar, channel);
+      await summarizeWar(bot, clash, curWar, channel);
       await saveWarToDB(curWar, lastWar);
       return;
     }
@@ -47,7 +47,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
     if (curWar.state == 'inWar' && curWar.isCWL && curWar.opponent.tag != lastWar.opponent) { //если начался следующий раунд ЛВК
       if (!lastWar.done) {
         const prevRound = await clash.getCurrentWar({ clanTag: clanTag, round: 'PREVIOUS_ROUND' }); //берём предыдущий
-        await summarizeWar(bot, prevRound, channel); //обрабатыевем
+        await summarizeWar(bot, clash, prevRound, channel); //обрабатыевем
         await saveWarToDB(prevRound, lastWar);
       }
       const newWar = new bot.Wars({ //записываем новый раунд
@@ -60,7 +60,7 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
     }
   }
 
-  async function summarizeWar(bot, war, channel) { // подведение итогов
+  async function summarizeWar(bot, clash, war, channel) { // подведение итогов
     if (war.state != 'warEnded') return; //не закончена - вышли
 
     let des;
@@ -154,24 +154,18 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
         if (member.townHallLevel >= minThNotDistr || attacks == null || attacks.length == 0) {
           await player.attacks.push({ score: 0, stars: 0, date: war.endTime });
           await player.save();
+
+          fieldValue += "0 (0 зв.)" + '\n';
         }
         else { //на случай если некого бить - атака не пропущена, но очки минимальные
           await player.attacks.push({ score: 1, stars: 0, date: war.endTime });
           await player.save();
+
+          fieldValue += "1 (0 зв.)" + '\n';
         }
-
-        fieldValue += "0 (0 зв.)" + '\n';
-
-        await bot.channels.cache.get('1074404720208252938').send(`Игрок ${member.townHallLevel}
-        Противник ${minThNotDistr}
-        По тх: ${member.townHallLevel >= minThNotDistr}
-        Пустые атаки: ${attacks == null}
-        Нулевая длинна: ${attacks.length == 0}`);
       }
 
-
-
-      //const attacksRating = generalFunctions.getAttacksRating(player);
+      //const attacksRating = generalFunctions.getAttacksRating(player, member);
       let warnReason = null;
 
       if (attacks == null || attacks.length == 0) warnReason = 'Пропуск атак';
@@ -180,8 +174,8 @@ module.exports = async (bot, clash, /*clanTag, channel, toRecord*/ clan) => {
       let playerClan = await bot.Clans.find({ tag: war.clan.tag });
       playerClan = playerClan[0];
 
-      if (playerClan.autoWarns && warnReason != null) {
-        require('./giveWarn')(bot, player, 1, warnReason, '#ST Ultimate');
+      if (playerClan.autoWarns == true && warnReason != null) {
+        require('./giveWarn')(bot, clash, player, 1, warnReason, '#ST Ultimate');
       }
 
 

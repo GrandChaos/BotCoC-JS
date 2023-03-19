@@ -1,20 +1,26 @@
 const generalFunctions = require('../generalFunctions.js')
 
-module.exports = async (bot, player) => {
+module.exports = async (bot, clash, player) => {
     let punish = generalFunctions.getPunishments(player);
     const logChannel = '1043444739430690876';
     const alertChannel = '1043848031470092398';
 
     if (player == null) return;
 
-    if (punish.countWarns >= player.warnsLimit && punish.countBans == 0) {
+    const member = await clash.getPlayer(player._id);
+
+    let extraLimits = 0;
+    const attacksRating = generalFunctions.getAttacksRating(player, member);
+    if (attacksRating.countExtraLimits > 0) extraLimits = 1;
+
+    if (punish.countWarns >= player.warnsLimit+extraLimits && punish.countBans == 0) {
         let dateEnd = new Date();
         dateEnd.setDate(dateEnd.getDate() + 30);
 
-        await player.bans.push({ dateEnd: dateEnd, reason: `${punish.countWarns}/${player.warnsLimit} предупреждений (#ST Ultimate)` });
+        await player.bans.push({ dateEnd: dateEnd, reason: `${punish.countWarns}/${player.warnsLimit+extraLimits} предупреждений (#ST Ultimate)` });
         await player.save();
 
-        bot.channels.cache.get(logChannel).send(`Автоматически заблокирован игрок **${player.nickname}** *(${player._id})* по причине: "${punish.countWarns}/${player.warnsLimit} предупреждений"`);
+        bot.channels.cache.get(logChannel).send(`Автоматически заблокирован игрок **${player.nickname}** *(${player._id})* по причине: "${punish.countWarns}/${player.warnsLimit+extraLimits} предупреждений"`);
         punish = generalFunctions.getPunishments(player);
     }
 

@@ -33,7 +33,7 @@ async function asyncTimeout (ms) {
 };
 
 
-function getAttacksRating(player) {
+function getAttacksRating(player, member) {
   let attacksTable = "```Очки | Звёзды | Дата\n"
   let rating = 0;
   let countAttacks = 0;
@@ -42,6 +42,7 @@ function getAttacksRating(player) {
   let totalStars = 0;
   let stars = 0;
   let starsRatio = 0;
+  let countGoodAttacks = 0;
 
   for (const attack of player.attacks) {
     totalStars += attack.stars;
@@ -51,6 +52,7 @@ function getAttacksRating(player) {
     stars += attack.stars;
     countAttacks++;
     if (attack.score == 0) countSkippedAttacks++;
+    if (attack.score >= 800) countGoodAttacks++;
 
     if (attack.score >= 1000) attacksTable += attack.score + " | ";
     else if (attack.score >= 100) attacksTable += "\u00A0" + attack.score + " | ";
@@ -68,6 +70,11 @@ function getAttacksRating(player) {
 
   rating = Math.trunc(rating / countAttacks);
 
+  let countExtraLimits = 0
+  if (countGoodAttacks >= 7 && rating >= 800) countExtraLimits++;
+  if (member.donations >= 7000) countExtraLimits++;
+  if (member.league.name.includes('Titan') == true) countExtraLimits++;
+
   return {
     rating: rating,
     starsRatio: starsRatio,
@@ -76,6 +83,8 @@ function getAttacksRating(player) {
     totalAttacks: totalAttacks,
     countSkippedAttacks: countSkippedAttacks,
     attacksTable: attacksTable,
+    countGoodAttacks: countGoodAttacks,
+    countExtraLimits: countExtraLimits,
   }
 }
 

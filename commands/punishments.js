@@ -30,6 +30,11 @@ module.exports = async (bot, clash, message, args, argsF) => {
         return;
     }
 
+    const member = await clash.getPlayer(player._id);
+    let extraLimits = 0;
+    const attacksRating = generalFunctions.getAttacksRating(player, member);
+    if (attacksRating.countExtraLimits > 0) extraLimits = 1;
+
     let des = '';
     const punish = generalFunctions.getPunishments(player);
     
@@ -42,7 +47,10 @@ module.exports = async (bot, clash, message, args, argsF) => {
     if (punish.countWarns > 0) {
       des += `Предупреждения:\n${punish.warnsTable}\nВсего предупреждений: ${punish.countWarns}\n`;
     }
-    des += `Лимит предупреждений: ${player.warnsLimit}\n\n`;
+    if (extraLimits > 0) {
+      des += `Лимит предупреждений: ${player.warnsLimit}(+1)\n\n`;
+    }
+    else des += `Лимит предупреждений: ${player.warnsLimit}\n\n`;
     if (punish.countNotActualWarns > 0) {
       des += `История предупреждений:\n${punish.notActualWarnsTable}\n`;
     }

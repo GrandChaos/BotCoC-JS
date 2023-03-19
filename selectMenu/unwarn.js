@@ -34,5 +34,10 @@ module.exports = async (bot, clash, interaction, args) => {
 
     let countWarns = generalFunctions.getPunishments(player).countWarns;
 
-    interaction.reply(`Предупреждения с игрока ${player.nickname} сняты\nОсталось предупреждений: ${countWarns}\nЛимит предупреждений: ${player.warnsLimit}`);
+    const member = await clash.getPlayer(player._id);
+    let extraLimits = 0;
+    const attacksRating = generalFunctions.getAttacksRating(player, member);
+    if (attacksRating.countExtraLimits > 0) extraLimits = 1;
+
+    interaction.reply(`Предупреждения с игрока ${player.nickname} сняты\nОсталось предупреждений: ${countWarns}\nЛимит предупреждений: ${player.warnsLimit+extraLimits}`);
 };

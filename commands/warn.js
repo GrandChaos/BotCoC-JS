@@ -35,15 +35,20 @@ module.exports = async (bot, clash, message, args, argsF) => {
         return;
     }
 
+    const member = await clash.getPlayer(player._id);
+    let extraLimits = 0;
+    const attacksRating = generalFunctions.getAttacksRating(player, member);
+    if (attacksRating.countExtraLimits > 0) extraLimits = 1;
+
     await player.warns.push({ amount: args.amount, reason: `${args.reason} (${message.author.username})` });
     await player.save();
 
     let countWarns = generalFunctions.getPunishments(player).countWarns;
 
     bot.channels.cache.get(channel).send(`${message.author.toString()} выдал ${args.amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${args.reason}"`);
-    message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"\nВсего предупреждений: ${countWarns}\nЛимит предупреждений: ${player.warnsLimit}`);
+    message.reply(`Предупреждения игроку ${player.nickname} выданы\nПричина: "${args.reason}"\nВсего предупреждений: ${countWarns}\nЛимит предупреждений: ${player.warnsLimit+extraLimits}`);
 
-    require('../update/checkPunish')(bot, player);
+    require('../update/checkPunish')(bot, clash, player);
 };
 
 

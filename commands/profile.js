@@ -29,6 +29,8 @@ module.exports = async (bot, clash, message, args, argsF) => {
 
     const member = await clash.getPlayer(player._id);
 
+    const attacksRating = generalFunctions.getAttacksRating(player, member);
+
     let dateDes;
     if (player.clan != null) dateDes = `Состоит в клане с ${generalFunctions.formatDateFull(player.date)}`;
     else dateDes = `Покинул клан ${generalFunctions.formatDateFull(player.date)}`;
@@ -54,17 +56,25 @@ ${dateDes}
 
     const punishments = generalFunctions.getPunishments(player);
     let punishmentsDes;
-    if (punishments.countBans > 0) {
+    if (punishments.countBans > 0 && attacksRating.countExtraLimits == 0) {
       punishmentsDes = `
 **ЗАБЛОКИРОВАН**
 Предупреждений: ${punishments.countWarns}/${player.warnsLimit}`;
     }
-    else if (punishments.countBans == 0) {
+    else if (punishments.countBans == 0 && attacksRating.countExtraLimits == 0) {
       punishmentsDes = `
 Предупреждений: ${punishments.countWarns}/${player.warnsLimit}`;
     }
+    else if (punishments.countBans > 0 && attacksRating.countExtraLimits > 0) {
+      punishmentsDes = `
+**ЗАБЛОКИРОВАН**
+Предупреждений: ${punishments.countWarns}/${player.warnsLimit}(+1)`;
+    }
+    else if (punishments.countBans == 0 && attacksRating.countExtraLimits > 0) {
+      punishmentsDes = `
+Предупреждений: ${punishments.countWarns}/${player.warnsLimit}(+1)`;
+    }
 
-    const attacksRating = generalFunctions.getAttacksRating(player);
     let attacksDes;
     if (attacksRating.countAttacks == 0 && attacksRating.totalAttacks == 0) {
       attacksDes = `

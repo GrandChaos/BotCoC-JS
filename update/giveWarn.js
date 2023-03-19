@@ -1,6 +1,6 @@
 const generalFunctions = require('../generalFunctions.js')
 
-module.exports = async (bot, player, amount, reason, author) => {
+module.exports = async (bot, clash, player, amount, reason, author) => {
     const channel = '1043444739430690876';
 
     if (amount <= 0) {
@@ -13,5 +13,5 @@ module.exports = async (bot, player, amount, reason, author) => {
   
     bot.channels.cache.get(channel).send(`Автоматически выдано ${amount} предупреждений игроку **${player.nickname}** *(${player._id})* по причине: "${reason}"`);
 
-    require('./checkPunish')(bot, player);
+    require('./checkPunish')(bot, clash, player);
 }
