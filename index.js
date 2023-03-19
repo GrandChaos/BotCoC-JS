@@ -12,7 +12,7 @@ const bot = new Discord.Client(config.cfg);
 bot.login(process.env.TOKEN)
   .then(()=>{console.log('Bot is running!\n')})
   .catch((err)=>{console.log(`Bot error: ${err}`)});
-bot.version = {text: '#ST Ultimate Bot, v2.16'};
+bot.version = {text: '#ST Ultimate Bot, v2.17'};
 bot.lastPing = new Date();
 setTimeout(() => bot.channels.cache.get('1074404720208252938').send(`**Bot is running!**\n${(new Date())}`), 10000);
 
