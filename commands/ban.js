@@ -51,7 +51,7 @@ module.exports = async (bot, clash, message, args, argsF) => {
         message.reply(`Игрок ${player.nickname} заблокирован навсегда\nПричина: "${args.reason}"`);
     }
 
-    require('../update/checkPunish')(bot, player, message);
+    require('../update/checkPunish')(bot, clash, player);
 };
 
 

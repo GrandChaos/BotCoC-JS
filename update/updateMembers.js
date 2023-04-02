@@ -104,7 +104,7 @@ module.exports = async (bot, clash, clan, alliance) => {
         }
       }
 
-      require('./checkPunish')(bot, player);
+      require('../update/checkPunish')(bot, clash, player);
 
     }
     return;
